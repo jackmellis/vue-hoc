@@ -1,0 +1,50 @@
+{
+  "name": "vue-hoc",
+  "version": "0.1.0",
+  "description": "Create Higher Order Vue Components",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "ava",
+    "debug": "inspect node_modules/ava/profile",
+    "build": "babel src -d dist/",
+    "prepublish": "npm run build",
+    "flow": "flow"
+  },
+  "ava": {
+    "files": [
+      "spec/**/*.spec.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "./spec/hooks.js"
+    ],
+    "concurrency": 4
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/vue-hoc.git"
+  },
+  "author": "Jack Ellis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackmellis/vue-hoc/issues"
+  },
+  "homepage": "https://github.com/jackmellis/vue-hoc#readme",
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "browser-env": "^3.1.2",
+    "flow-bin": "^0.53.0",
+    "inspect-process": "^0.5.0",
+    "require-extension-hooks": "^0.3.0",
+    "require-extension-hooks-module": "^0.1.4",
+    "sinon": "^3.2.0",
+    "vue": "^2.4.2",
+    "vuenit": "^1.0.0"
+  }
+}

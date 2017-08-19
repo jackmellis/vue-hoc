@@ -22,7 +22,7 @@ test('it renders a slot', t => {
 });
 
 test('it passes slots through a hoc', t => {
-  const hoc = createHOC(null, Component);
+  const hoc = createHOC(Component);
   const vm = mount(hoc, {
     slots: {
       default: '<div id="default"></div>',
@@ -34,8 +34,8 @@ test('it passes slots through a hoc', t => {
 });
 
 test('passes slots through multiple hocs', t => {
-  const hoc1 = createHOC(null, Component);
-  const hoc2 = createHOC(null, hoc1);
+  const hoc1 = createHOC(Component);
+  const hoc2 = createHOC(hoc1);
   const vm = mount(hoc2, {
     slots: {
       default: '<div id="default"></div>',

@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createRenderFn} from '../src';
+import {createHOC, createHOCc, createRenderFn, createRenderFnc} from '../src';
 
 const Component = {
   props : ['propA', 'propB'],
@@ -14,9 +14,9 @@ const Component = {
 mount(Component);
 
 test('props filter through hoc into component', t => {
-  const enhance = createHOC({
+  const enhance = createHOCc({
   });
-  const enhanced = enhance(Component);
+  const enhanced = enhance(null, Component);
 
   const vm = mount(enhanced, {
     props : {
@@ -31,14 +31,14 @@ test('props filter through hoc into component', t => {
 });
 
 test('can overwrite prop values', t => {
-  const enhance = createHOC({
-    render : createRenderFn({
+  const enhance = createHOCc({
+    render : createRenderFnc({
       props : {
         propA : 'bah',
         propB : 'foo'
       }
     })
-  });
+  }, null);
   const enhanced = enhance(Component);
 
   const vm = mount(enhanced, {
@@ -54,8 +54,8 @@ test('can overwrite prop values', t => {
 });
 
 test('can amend prop values with a function', t => {
-  const enhance = createHOC({
-    render: createRenderFn({
+  const enhance = createHOCc({
+    render: createRenderFnc({
       props(props){
         return {
           propA : this.$props.propB,
@@ -63,7 +63,7 @@ test('can amend prop values with a function', t => {
         };
       }
     })
-  });
+  }, null);
   const enhanced = enhance(Component);
 
   const vm = mount(enhanced, {
@@ -79,9 +79,9 @@ test('can amend prop values with a function', t => {
 });
 
 test('can add additional props', t => {
-  const enhance = createHOC({
+  const enhance = createHOCc({
     props : ['propB', 'propC'],
-    render : createRenderFn({
+    render : createRenderFnc({
       props(props){
         t.is(Object.hasOwnProperty.call(props, 'propA'), false);
         t.is(Object.hasOwnProperty.call(props, 'propB'), true);
@@ -91,7 +91,7 @@ test('can add additional props', t => {
         };
       }
     })
-  });
+  }, null);
   const enhanced = enhance(Component);
 
   const vm = mount(enhanced, {
@@ -109,8 +109,8 @@ test('can add additional props', t => {
 });
 
 test('can pass props through multiple hocs', t => {
-  const hoc1 = createHOC({}, Component);
-  const hoc2 = createHOC({}, hoc1);
+  const hoc1 = createHOCc({}, {}, Component);
+  const hoc2 = createHOCc({}, {}, hoc1);
 
   const vm = mount(hoc2, {
     props : {

@@ -10,11 +10,11 @@ mount(Component);
 
 test('adds a created hook', t => {
   const spy = sinon.spy();
-  const hoc = createHOC({
+  const hoc = createHOC(Component, {
     created(){
       spy();
     },
-  }, Component);
+  });
   const vm = mount(hoc);
 
   t.true(spy.called);

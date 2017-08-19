@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createRenderFn} from '../src';
+import {createHOC, createHOCc, createRenderFn} from '../src';
 
 const Component = {
   props : ['propA'],
@@ -10,7 +10,18 @@ const Component = {
 mount(Component);
 
 test('wraps a component in a hoc', t => {
-  const hoc = createHOC(null, Component);
+  const hoc = createHOC(Component);
+  const vm = mount(hoc, {
+    props: {
+      propA: 'foo'
+    }
+  });
+
+  t.true(vm.$html.includes('foo'));
+});
+
+test('wraps a component in a curried hoc', t => {
+  const hoc = createHOCc(null)(null)(Component);
   const vm = mount(hoc, {
     props: {
       propA: 'foo'
@@ -21,7 +32,7 @@ test('wraps a component in a hoc', t => {
 });
 
 test('has a default name', t => {
-  const hoc = createHOC(null, Component);
+  const hoc = createHOC(Component);
   const vm = mount(hoc, {
     props: {
       propA: 'foo'
@@ -32,7 +43,7 @@ test('has a default name', t => {
 });
 
 test('extends the compnent name', t => {
-  const hoc = createHOC(null, Object.assign({name:'MyComponent'}, Component));
+  const hoc = createHOC(Object.assign({name:'MyComponent'}, Component));
   const vm = mount(hoc, {
     name: 'MyComponent',
     props: {
@@ -44,9 +55,9 @@ test('extends the compnent name', t => {
 });
 
 test('extends the compnent name', t => {
-  const hoc = createHOC({
+  const hoc = createHOC(Component, {
     name: 'MyHoc',
-  }, Component);
+  });
   const vm = mount(hoc, {
     name: 'MyComponent',
     props: {
@@ -58,13 +69,11 @@ test('extends the compnent name', t => {
 });
 
 test('provide props to the hoc', t => {
-  const hoc = createHOC({
-    with: {
-      props: {
-        propA: 'from hoc'
-      }
+  const hoc = createHOC(Component, null, {
+    props: {
+      propA: 'from hoc'
     }
-  }, Component);
+  });
   const vm = mount(hoc, {
     props: {
       propA: 'foo'

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ava",
     "debug": "inspect node_modules/ava/profile",
-    "build": "babel src -d dist/",
+    "build": "babel src/ -d dist/ --source-maps",
     "prepublish": "npm run build",
     "flow": "flow"
   },
@@ -42,7 +42,7 @@
     "flow-bin": "^0.53.0",
     "inspect-process": "^0.5.0",
     "require-extension-hooks": "^0.3.0",
-    "require-extension-hooks-module": "^0.1.4",
+    "require-extension-hooks-babel": "^0.1.1",
     "sinon": "^3.2.0",
     "vue": "^2.4.2",
     "vuenit": "^1.0.0"

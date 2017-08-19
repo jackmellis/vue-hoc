@@ -13,6 +13,7 @@ import {createRenderFnc} from './createRenderFn';
 export const createHOC: CreateHOC = (Component, options, renderOptions) => {
   options = options || {};
   const hoc: Ctor = Object.assign({
+    functional: false,
     props: (typeof Component === 'function')
       ? Component.options.props
       : Component.props,

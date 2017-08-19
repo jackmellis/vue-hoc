@@ -9,39 +9,65 @@ import type {
 import courier from './courier';
 import normalizeSlots from './normalizeSlots';
 
-export const createRenderFn: CreateRenderFn = (Component, options) => {
-  let {attrs, listeners, props} = (options || {});
+type Normalizer = (
+  self?: Object,
+  context?: Object,
+  options: {
+    attrs?: Object,
+    props?: Object,
+    listeners?: Object
+  }
+) => Object | void;
 
-  return function renderHoc(h: Function) {
-    if (typeof attrs === 'function'){
-      attrs = attrs.call(this, this.$attrs || {});
-    }else{
-      attrs = Object.assign({}, this.$attrs, attrs);
+const normaliseN = (
+  context?: Object,
+  userN?: Object | Function,
+  ownerN?: Object,
+  bindToInstance?: boolean
+): (Object | void) => {
+  if (userN){
+    if (typeof userN === 'function'){
+      return userN.call(context, ownerN);
     }
-    if (typeof props === 'function'){
-      props = props.call(this, this.$props || {});
-    }else{
-      props = Object.assign({}, this.$props, props);
+    if (bindToInstance){
+      userN = Object.assign({}, userN);
+      // $FlowFixMe
+      Object.keys(userN).forEach(key => userN[key] = userN[key].bind(context));
     }
-    if (typeof listeners === 'function'){
-      listeners = listeners.call(this, this.$listeners || {});
-    }else{
-      if (listeners){
-        listeners = Object.assign({}, listeners);
-        Object.keys(listeners).forEach((key: string) => {
-          // $FlowFixMe
-          listeners[key] = listeners[key].bind(this)
-        });
-      }
-      listeners = Object.assign({}, this.$listeners, listeners);
-    }
+    return Object.assign({}, ownerN, userN);
+  }
+  return ownerN;
+};
+const normalizeAttrs: Normalizer = (self, context, options) => {
+  const ownerAttrs = (context && context.data && context.data.attrs) || (self && self.$attrs) || {};
+  const userAttrs = options.attrs;
+  return normaliseN(context || self, userAttrs, ownerAttrs);
+}
+const normaliseProps: Normalizer = (self, context, options) => {
+  const ownerProps = (context && context.props) || (self && self.$props) || {};
+  const userProps = options.props;
+  return normaliseN(context || self, userProps, ownerProps);
+}
+const normaliseListeners: Normalizer = (self, context, options) => {
+  const ownerListeners = (context && context.listeners) || (self && self.$listeners) || {};
+  const userListeners = options.listeners;
+  return normaliseN(context || self, userListeners, ownerListeners, true);
+}
+
+export const createRenderFn: CreateRenderFn = (Component, options) => {
+  return function renderHoc(h: Function, context?: Object) {
+    const props = normaliseProps(this, context, options || {});
+    const attrs = normalizeAttrs(this, context, options || {});
+    const listeners = normaliseListeners(this, context, options || {});
+    const scopedSlots = (context && context.data && context.data.scopedSlots) || (this && this.$scopedSlots);
+    const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || null;
 
     return h(Component, {
       attrs,
       props,
       on: listeners,
-      scopedSlots: this.$scopedSlots
-    }, normalizeSlots(this.$slots));
+      scopedSlots
+    }, slots);
   };
 };
 

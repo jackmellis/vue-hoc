@@ -58,16 +58,18 @@ export const createRenderFn: CreateRenderFn = (Component, options) => {
   return function renderHoc(h: Function, context?: Object) {
     const props = normaliseProps(this, context, options || {});
     const attrs = normalizeAttrs(this, context, options || {});
-    const listeners = normaliseListeners(this, context, options || {});
+    const on = normaliseListeners(this, context, options || {});
     const scopedSlots = (context && context.data && context.data.scopedSlots) || (this && this.$scopedSlots);
     const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || null;
 
-    return h(Component, {
+    const data = Object.assign({}, options, {
       attrs,
       props,
-      on: listeners,
-      scopedSlots
-    }, slots);
+      on,
+      scopedSlots,
+    });
+
+    return h(Component, data, slots);
   };
 };
 

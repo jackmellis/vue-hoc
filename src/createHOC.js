@@ -9,18 +9,50 @@ import type {
 
 import courier from './courier';
 import {createRenderFnc} from './createRenderFn';
+import Vue from 'vue';
 
-export const createHOC: CreateHOC = (Component, options, renderOptions) => {
-  options = options || {};
-  const hoc: Ctor = Object.assign({
-    functional: false,
+const defaultStrategy = (parent, child) => child;
+
+const normalizeProps = (props: Object | Array<string> | void) => {
+  if (!props){
+    return {};
+  }
+  if (Array.isArray(props)){
+    const obj = {};
+    props.forEach((key) => {
+      if (typeof key === 'string'){
+        obj[key] = {}
+      }
+    });
+    return obj;
+  }
+  return props;
+};
+
+export const createHOC: CreateHOC = (Component, options, renderOptions) => { {};
+  const hoc: Ctor = {
     props: (typeof Component === 'function')
       ? Component.options.props
       : Component.props,
-    mixins: [],
-    name: (Component.name || 'Annonymous') + 'HOC',
-    render: createRenderFnc(renderOptions),
-  }, options);
+      mixins: [],
+      name: `${Component.name || 'Annonymous'}HOC`,
+      render: createRenderFnc(renderOptions),
+  };
+  if (options){
+    Object.keys(options).forEach((key) => {
+      const child = options && options[key];
+      const parent = hoc[key];
+      const strategy: Function = Vue.config.optionMergeStrategies[key] || defaultStrategy;
+
+      if (key === 'props'){
+
+        // $FlowFixMe
+        hoc[key] = strategy(normalizeProps(parent), normalizeProps(child));
+      }else{
+        hoc[key] = strategy(parent, child);
+      }
+    });
+  }
 
   hoc.mixins && hoc.mixins.push({
     created(){

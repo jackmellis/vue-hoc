@@ -83,7 +83,7 @@ test('can add additional props', t => {
     props : ['propB', 'propC'],
     render : createRenderFnc({
       props(props){
-        t.is(Object.hasOwnProperty.call(props, 'propA'), false);
+        t.is(Object.hasOwnProperty.call(props, 'propA'), true);
         t.is(Object.hasOwnProperty.call(props, 'propB'), true);
         return {
           propA : props.propC[0],
@@ -102,8 +102,7 @@ test('can add additional props', t => {
     }
   });
 
-  // so because we have redeclared props, propA is now just passed as an attribute
-  const expected = `<ul propa="foo"><li>abc</li><li>def</li></ul>`;
+  const expected = `<ul><li>abc</li><li>def</li></ul>`;
 
   t.is(vm.$html, expected);
 });

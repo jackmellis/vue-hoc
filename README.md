@@ -1,6 +1,8 @@
 # vue-hoc
 Create Higher Order Vue Components
 
+Inspired by https://github.com/vuejs/vue/issues/6201
+
 ## createHOC
 ```js
 (Component: Object | Function, options?: Object, renderOptions?: Object) => Object;
@@ -22,7 +24,7 @@ const withCreatedHook = createHOC(Component, {
 });
 ```
 ### renderOptions
-The renderOptions object allows you to amend what props, listeners and attributes will be passed into the child component. For more information on the available options, see the [`createRenderFn`](#createRenderFn) method.
+The renderOptions object allows you to amend what props, listeners and attributes will be passed into the child component. For more information on the available options.
 ```js
 const withEventHandler = createHOC(Component, null, {
   listeners: {
@@ -32,35 +34,6 @@ const withEventHandler = createHOC(Component, null, {
   }
 });
 ```
-
-## createHOCc
-```js
-(options: Object, renderOptions: Object, Component: Object | Function) => Object;
-```
-This is a curried variation of the `createHOC` method. This allows you to build a HOC creator and pass in a component at the end.
-```js
-const withCreatedHook = createHOCc({
-  created(){
-    console.log('created');
-  }
-}, null);
-
-const hoc = withCreatedHook(Component);
-```
-
-## createRenderFn
-```js
-(Component: Object, options?: Object)=> Function;
-```
-createRenderFn is responsible for rendering the wrapped component in your hoc.
-```js
-const hoc = createHOC(Component, {
-  render: createRenderFn(Component, {})
-});
-```
-It is already used by `createHOC` to generate the render property of the component so you do not need to pass it in every time.
-
-### options
 #### props
 ```js
 Object | (props: Object) => Object;
@@ -137,6 +110,36 @@ createRenderFn(Component, {
   }
 });
 ```
+
+## createHOCc
+```js
+(options: Object, renderOptions: Object, Component: Object | Function) => Object;
+```
+This is a curried variation of the `createHOC` method. This allows you to build a HOC creator and pass in a component at the end.
+```js
+const withCreatedHook = createHOCc({
+  created(){
+    console.log('created');
+  }
+}, null);
+
+const hoc = withCreatedHook(Component);
+```
+
+## createRenderFn
+```js
+(Component: Object, options?: Object)=> Function;
+```
+createRenderFn is responsible for rendering the wrapped component in your hoc.
+```js
+const hoc = createHOC(Component, {
+  render: createRenderFn(Component, {})
+});
+```
+It is already used by `createHOC` to generate the render property of the component so you do not need to pass it in every time.
+
+### options
+See [renderOptions](#renderOptions).
 
 ## createRenderFnc
 ```js

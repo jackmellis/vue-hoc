@@ -7,6 +7,8 @@ export type CompnentDefinition = {
 };
 export type Ctor = CompnentDefinition | Function;
 
+export type NormalizeSlots = (slots: Object) => Array<Object>;
+
 type Listeners = {
   [eventName: string]: Function
 };
@@ -30,5 +32,3 @@ export type CreateHOCc = (
   renderOptions?: CreateRenderFnOptions,
   Component?: Ctor,
 ) => Ctor | Function;
-
-export type NormalizeSlots = (slots: Object) => Array<Object>;

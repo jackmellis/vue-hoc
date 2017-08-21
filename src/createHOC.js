@@ -35,7 +35,7 @@ export const createHOC: CreateHOC = (Component, options, renderOptions) => {
             ? Component.options.props
             : Component.props,
         mixins: [],
-        name: `${Component.name || 'Annonymous'}HOC`,
+        name: `${Component.name || 'Anonymous'}HOC`,
         render: createRenderFnc(renderOptions),
     };
     if (options){

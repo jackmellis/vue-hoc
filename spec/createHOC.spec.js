@@ -5,7 +5,7 @@ import {createHOC, createHOCc, createRenderFn} from '../src';
 
 const Component = {
   props : ['propA'],
-  template : `<div>{{propA}}</div>`,
+  template : '<div>{{propA}}</div>',
 };
 mount(Component);
 
@@ -39,7 +39,7 @@ test('has a default name', t => {
     }
   });
 
-  t.is(vm.$name, 'AnnonymousHOC');
+  t.is(vm.$name, 'AnonymousHOC');
 });
 
 test('extends the compnent name', t => {

@@ -23,6 +23,7 @@ const withCreatedHook = createHOC(Component, {
   }
 });
 ```
+
 ### renderOptions
 The renderOptions object allows you to amend what props, listeners and attributes will be passed into the child component. For more information on the available options.
 ```js
@@ -110,6 +111,7 @@ createRenderFn(Component, {
   }
 });
 ```
+The renderOptions argument can also contain any number of additional options found [here](https://vuejs.org/v2/guide/render-function.html#The-Data-Object-In-Depth).
 
 ## createHOCc
 ```js

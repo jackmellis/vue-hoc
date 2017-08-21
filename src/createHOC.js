@@ -1,10 +1,10 @@
 // @flow
 import type {
-    Ctor,
-    CreateRenderFnOptions,
-    CreateHOCOptions,
-    CreateHOC,
-    CreateHOCc,
+  Ctor,
+  CreateRenderFnOptions,
+  CreateHOCOptions,
+  CreateHOC,
+  CreateHOCc,
 } from './annotations';
 
 import courier from './courier';
@@ -14,65 +14,65 @@ import Vue from 'vue';
 const defaultStrategy = (parent, child) => child;
 
 const normalizeProps = (props: Object | Array<string> | void) => {
-    if (!props){
-        return {};
-    }
-    if (Array.isArray(props)){
-        const obj = {};
-        props.forEach((key) => {
-            if (typeof key === 'string'){
-                obj[key] = {};
-            }
-        });
-        return obj;
-    }
-    return props;
+  if (!props){
+    return {};
+  }
+  if (Array.isArray(props)){
+    const obj = {};
+    props.forEach((key) => {
+      if (typeof key === 'string'){
+        obj[key] = {};
+      }
+    });
+    return obj;
+  }
+  return props;
 };
 
 export const createHOC: CreateHOC = (Component, options, renderOptions) => {
-    const hoc: Ctor = {
-        props: (typeof Component === 'function')
-            ? Component.options.props
-            : Component.props,
-        mixins: [],
-        name: `${Component.name || 'Annonymous'}HOC`,
-        render: createRenderFnc(renderOptions),
-    };
-    if (options){
-        Object.keys(options).forEach((key) => {
-            const child = options && options[key];
-            const parent = hoc[key];
-            const strategy: Function = Vue.config.optionMergeStrategies[key] || defaultStrategy;
+  const hoc: Ctor = {
+    props: (typeof Component === 'function')
+      ? Component.options.props
+      : Component.props,
+    mixins: [],
+    name: `${Component.name || 'Annonymous'}HOC`,
+    render: createRenderFnc(renderOptions),
+  };
+  if (options){
+    Object.keys(options).forEach((key) => {
+      const child = options && options[key];
+      const parent = hoc[key];
+      const strategy: Function = Vue.config.optionMergeStrategies[key] || defaultStrategy;
 
-            if (key === 'props'){
+      if (key === 'props'){
 
-                // $FlowFixMe
-                hoc[key] = strategy(normalizeProps(parent), normalizeProps(child));
-            }else{
-                hoc[key] = strategy(parent, child);
-            }
-        });
-    }
-
-    hoc.mixins && hoc.mixins.push({
-        created(){
-            this.$createElement = this.$parent.$createElement;
-        }
+        // $FlowFixMe
+        hoc[key] = strategy(normalizeProps(parent), normalizeProps(child));
+      }else{
+        hoc[key] = strategy(parent, child);
+      }
     });
+  }
 
-    if (hoc.render && hoc.render.curried){
-        hoc.render = hoc.render(Component);
+  hoc.mixins && hoc.mixins.push({
+    created(){
+      this.$createElement = this.$parent.$createElement;
     }
+  });
 
-    return hoc;
+  if (hoc.render && hoc.render.curried){
+    hoc.render = hoc.render(Component);
+  }
+
+  return hoc;
 };
 
 export const createHOCc: CreateHOCc = courier(3, (
-    options: CreateHOCOptions,
-    renderOptions: CreateRenderFnOptions,
-    Component: Ctor
+  options: CreateHOCOptions,
+  renderOptions: CreateRenderFnOptions,
+  Component: Ctor
 ) => {
-    return createHOC(Component, options, renderOptions);
+  return createHOC(Component, options, renderOptions);
 });
 
 export default createHOC;

@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createHOCc, createRenderFn} from '../src';
+import {createHOC, createHOCc, createRenderFn} from '../dist';
 
 const Component = {
   props : ['propA'],

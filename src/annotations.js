@@ -15,7 +15,7 @@ type Listeners = {
 export type CreateRenderFnOptions = {
   attrs?: Object | (attrs: Object) => Object,
   props?: Object | (props: Object) => Object,
-  listeners?: Listeners | (listeners: Listeners) => Listeners,
+  on?: Listeners | (listeners: Listeners) => Listeners,
 };
 export type CreateRenderFn = (Component: Ctor, options?: CreateRenderFnOptions) => Function;
 export type CreateRenderFnc = (options?: CreateRenderFnOptions, Component?: Ctor) => Function;

@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createRenderFn} from '../src';
+import {createHOC, createRenderFn} from '../dist';
 
 const Component = {
   template : `<div>

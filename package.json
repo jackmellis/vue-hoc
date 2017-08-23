@@ -5,10 +5,11 @@
   "description": "Create Higher Order Vue Components",
   "main": "dist/index.js",
   "scripts": {
-    "test": "ava",
+    "test": "npm run build && ava",
+    "coverage": "nyc --reporter=html npm test",
     "debug": "inspect node_modules/ava/profile",
     "build": "babel src/ -d dist/ --source-maps",
-    "prepare": "npm test && npm run lint && npm run build",
+    "prepublishOnly": "npm test && npm run lint && npm run build",
     "flow": "flow",
     "eslint": "eslint src --fix",
     "lint": "npm run eslint && npm run flow"
@@ -18,7 +19,7 @@
       "spec/**/*.spec.js"
     ],
     "source": [
-      "src/**/*.js"
+      "dist/**/*.js"
     ],
     "require": [
       "./spec/hooks.js"
@@ -48,8 +49,7 @@
     "eslint-plugin-import": "^2.7.0",
     "flow-bin": "^0.53.0",
     "inspect-process": "^0.5.0",
-    "require-extension-hooks": "^0.3.0",
-    "require-extension-hooks-babel": "^0.1.1",
+    "nyc": "^11.1.0",
     "sinon": "^3.2.0",
     "vue": "^2.4.2",
     "vuenit": "^1.0.0"

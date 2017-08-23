@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createHOCc, createRenderFn} from '../src';
+import {createHOC, createHOCc, createRenderFn} from '../dist';
 
 const Component = {
   template : `<div>
@@ -13,6 +13,7 @@ const Component = {
     }
   }
 };
+mount(Component);
 
 test('it emits an event', t => {
   const spy = sinon.spy();
@@ -32,7 +33,7 @@ test('it emits an event through a hoc', t => {
   const hoc = createHOC(Component);
   const C2 = {
     components : {hoc},
-    template : `<hoc @button1click="callSpy"/>`,
+    template : '<hoc @button1click="callSpy"/>',
     methods: {
       callSpy(){
         spy();
@@ -55,7 +56,7 @@ test('it can intercept an event', t => {
   })(Component);
   const C2 = {
     components : {hoc},
-    template : `<hoc @button1click="callSpy"/>`,
+    template : '<hoc @button1click="callSpy"/>',
     methods: {
       callSpy(){
         spy1();
@@ -86,7 +87,7 @@ test('it can bubble an event (function syntax)', t => {
   });
   const C2 = {
     components : {hoc},
-    template : `<hoc @button1click="callSpy"/>`,
+    template : '<hoc @button1click="callSpy"/>',
     methods: {
       callSpy(){
         spy1();
@@ -94,7 +95,7 @@ test('it can bubble an event (function syntax)', t => {
     }
   };
   const vm = mount(C2);
-
+  t.log(vm.$html);
   vm.$find('#button1').$trigger('click');
 
   t.true(spy1.called);
@@ -115,7 +116,7 @@ test('it can bubble an event (object syntax)', t => {
   });
   const C2 = {
     components : {hoc},
-    template : `<hoc @button1click="callSpy"/>`,
+    template : '<hoc @button1click="callSpy"/>',
     methods: {
       callSpy(){
         spy1();
@@ -137,7 +138,7 @@ test('events bubble through multiple hocs', t => {
   const hoc3 = createHOCc({}, null, hoc2);
   const C2 = {
     components : {hoc3},
-    template : `<hoc3 @button1click="callSpy"/>`,
+    template : '<hoc3 @button1click="callSpy"/>',
     methods: {
       callSpy(){
         spy();

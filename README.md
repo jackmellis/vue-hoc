@@ -28,7 +28,7 @@ const withCreatedHook = createHOC(Component, {
 The renderOptions object allows you to amend what props, listeners and attributes will be passed into the child component. For more information on the available options.
 ```js
 const withEventHandler = createHOC(Component, null, {
-  listeners: {
+  on: {
     customEvent(){
       this.$store.dispatch('action');
     }
@@ -83,27 +83,27 @@ createRenderFn(Component, {
 });
 ```
 
-#### listeners
+#### on
 ```js
 Object | (listeners: Object) => Object;
 ```
 ```js
 Object | (attrs: Object) => Object;
 ```
-Event handlers that will be invoked when the component emits the event name. If listeners is an object, it will be merged in with the original attributes. Each listener will be bound to the HOC component
+Event handlers that will be invoked when the component emits the event name. If on is an object, it will be merged in with the original attributes. Each listener will be bound to the HOC component
 ```js
 createRenderFn(Component, {
-  listeners: {
+  on: {
     click(e){
       this.$emit('click', e);
     }
   }
 });
 ```
-If listeners is a function, it will be invoked during the render and will *not* be merged with the original listeners. Also, the listeners will not automatically be bound to the component.
+If on is a function, it will be invoked during the render and will *not* be merged with the original listeners. Also, the listeners will not automatically be bound to the component.
 ```js
 createRenderFn(Component, {
-  listeners(listeners){
+  on(listeners){
     return {
       ...listeners,
       click: (e) => this.$emit('click', e);

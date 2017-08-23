@@ -9,70 +9,86 @@ import type {
 import courier from './courier';
 import normalizeSlots from './normalizeSlots';
 
-type Normalizer = (
-  self: Object | void,
-  context: Object | void,
-  options: {
-    attrs?: Object | (props: Object) => (Object | void),
-    props?: Object | (props: Object) => (Object | void),
-    listeners?: Object | (props: Object) => (Object | void)
-  }
-) => Object | void;
+const isObject = test => Object.prototype.toString.call(test) === '[object Object]';
 
-const normaliseN = (
+const justBindOptions = [
+  'listeners',
+  'nativeOn',
+  'scopedSlots',
+];
+
+const processOption = (
   context: Object,
-  userN: Object | void | (props: Object) => Object | void,
-  ownerN: Object,
-  bindToInstance?: boolean
-): (Object | void) => {
-  if (userN){
-    if (typeof userN === 'function'){
-      return userN.call(context, ownerN);
-    }
-    if (bindToInstance){
-      userN = Object.assign({}, userN);
-      Object.keys(userN).forEach(key => {
-        // $FlowFixMe;
-        userN[key] = userN[key].bind(context);
-      });
-    }
-    return Object.assign({}, ownerN, userN);
+  name: string,
+  option: Function | Object | void
+): Object => {
+  const owner = context[`$${name}`] ||
+                context.data && context.data[name] ||
+                context[name];
+  if (!option){
+    return owner;
   }
-  return ownerN;
+
+  if (typeof option === 'function'){
+    return option.call(context, owner);
+  }else if (isObject(option)){
+    const result = Object.assign({}, owner);
+    Object.keys(option).forEach(key => {
+      let value = option && option[key];
+      if (typeof value === 'function'){
+        if (justBindOptions.includes(name)){
+          value = value.bind(context);
+        }else{
+          value = value.call(context, owner);
+        }
+      }
+      result[key] = value;
+    });
+    return result;
+  }else{
+    return option;
+  }
 };
-const normalizeAttrs: Normalizer = (self, context, options) => {
-  const ownerAttrs = (context && context.data && context.data.attrs) || (self && self.$attrs) || {};
-  const userAttrs = options.attrs;
-  const ctx = context || self || {};
-  return normaliseN(ctx, userAttrs, ownerAttrs);
-};
-const normaliseProps: Normalizer = (self, context, options) => {
-  const ownerProps = (context && context.props) || (self && self.$props) || {};
-  const userProps = options.props;
-  const ctx = context || self || {};
-  return normaliseN(ctx, userProps, ownerProps);
-};
-const normaliseListeners: Normalizer = (self, context, options) => {
-  const ownerListeners = (context && context.listeners) || (self && self.$listeners) || {};
-  const userListeners = options.listeners;
-  const ctx = context || self || {};
-  return normaliseN(ctx, userListeners, ownerListeners, true);
+
+const processOptions = (
+  context: Object,
+  options: Object
+): Object => {
+  const keys = Object
+    .keys(options)
+    .concat(['listeners', 'props', 'attrs'])
+    .filter((k, i, a) => a.indexOf(k) === i);
+  const result = {
+    on: {},
+    props: {},
+    attrs: {},
+  };
+
+  keys.forEach(key => {
+    const value = processOption(context, key, options[key]);
+    if (key === 'listeners'){
+      key = 'on';
+    }
+    result[key] = value;
+  });
+  return result;
 };
 
 export const createRenderFn: CreateRenderFn = (Component, options) => {
-  return function renderHoc(h: Function, context?: Object) {
-    const props = normaliseProps(this, context, options || {});
-    const attrs = normalizeAttrs(this, context, options || {});
-    const on = normaliseListeners(this, context, options || {});
-    const scopedSlots = (context && context.data && context.data.scopedSlots) || (this && this.$scopedSlots);
-    const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || null;
+  return function renderHoc(
+    h: (
+      ctor: Object,
+      data: Object,
+      slots: Array<any>
+    ) => any,
+    context?: Object
+  ) {
+    const data = processOptions(this || context || {}, options || {});
+    const scopedSlots: Object = (context && context.data && context.data.scopedSlots) ||
+                        (this && this.$scopedSlots);
+    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || [];
 
-    const data = Object.assign({}, options, {
-      attrs,
-      props,
-      on,
-      scopedSlots,
-    });
+    data.scopedSlots = data.scopedSlots || scopedSlots;
 
     return h(Component, data, slots);
   };

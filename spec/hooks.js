@@ -1,4 +1,3 @@
-const hooks = require('require-extension-hooks');
+/* globals require */
 const browserEnv = require('browser-env');
 browserEnv();
-hooks('js').plugin('babel');

@@ -194,7 +194,7 @@ const hoc = createHOC(Component, {
 It is already used by `createHOC` to generate the render property of the component so you do not need to pass it in every time.
 
 #### options
-See [renderOptions](#renderOptions).
+See [renderWith](#renderWith).
 
 ### createRenderFnc
 ```js

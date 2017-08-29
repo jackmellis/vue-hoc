@@ -1,4 +1,7 @@
 // @flow
+import courier from './courier';
+import normalizeSlots from './normalizeSlots';
+
 import type {
   Ctor,
   CreateRenderFnOptions,
@@ -6,10 +9,8 @@ import type {
   CreateRenderFnc,
 } from './annotations';
 
-import courier from './courier';
-import normalizeSlots from './normalizeSlots';
-
 const isObject = test => Object.prototype.toString.call(test) === '[object Object]';
+const isFn = test => Object.prototype.toString.call(test) === '[object Function]';
 
 const justBindOptions = [
   'listeners',
@@ -17,64 +18,105 @@ const justBindOptions = [
   'scopedSlots',
 ];
 
-const processOption = (
-  context: Object,
-  name: string,
-  option: Function | Object | void
-): Object => {
-  const owner = context[`$${name}`] ||
-                context.data && context.data[name] ||
-                context[name];
-  if (!option){
-    return owner;
-  }
+const justBindFn = key => justBindOptions.indexOf(key) > -1;
 
-  if (typeof option === 'function'){
-    return option.call(context, owner);
-  }else if (isObject(option)){
-    const result = Object.assign({}, owner);
-    Object.keys(option).forEach(key => {
-      let value = option && option[key];
-      if (typeof value === 'function'){
-        if (justBindOptions.includes(name)){
-          value = value.bind(context);
-        }else{
-          value = value.call(context, owner);
-        }
-      }
-      result[key] = value;
-    });
-    return result;
-  }else{
-    return option;
-  }
-};
+const getOptionsKeys = options => Object
+  .keys(options)
+  .concat(['listeners', 'props', 'attrs'])
+  .filter((k, i, a) => a.indexOf(k) === i);
 
-const processOptions = (
-  context: Object,
-  options: Object
-): Object => {
-  const keys = Object
-    .keys(options)
-    .concat(['listeners', 'props', 'attrs'])
-    .filter((k, i, a) => a.indexOf(k) === i);
-  const result = {
-    on: {},
-    props: {},
-    attrs: {},
-  };
+const createOptionHandlers = (originalOptions, keys) => {
+  const options: {
+    [dataName: string]: Function
+  } = {};
 
   keys.forEach(key => {
-    const value = processOption(context, key, options[key]);
-    if (key === 'listeners'){
-      key = 'on';
+    const option = originalOptions[key];
+
+    if (!option){
+      options[key] = owner => owner;
+      return;
     }
-    result[key] = value;
+
+    if (isFn(option)){
+      // $FlowFixMe
+      options[key] = option;
+      return;
+    }
+
+    if (isObject(option)){
+      const optionKeys = Object.keys(option);
+
+      if (!optionKeys.some(k => isFn(option[k]))){
+        options[key] = (owner) => Object.assign({}, owner, option);
+        return;
+      }
+
+      options[key] = function(owner) {
+        const result = Object.assign({}, owner);
+        const justBind = justBindFn(key);
+
+        optionKeys.forEach(k => {
+          let value = option && option[k];
+
+          if (isFn(value)){
+            if (justBind){
+              value = value.bind(this);
+            }else{
+              value = value.call(this, owner);
+            }
+          }
+          result[k] = value;
+        });
+        return result;
+      };
+      return;
+    }
+
+    options[key] = () => option;
   });
-  return result;
+
+  return options;
 };
 
+const preprocessOptions = (originalOptions) => {
+  const keys = getOptionsKeys(originalOptions);
+  const options = createOptionHandlers(originalOptions, keys);
+
+  return (context, isFunctional) => {
+    const result: {
+      on: Object,
+      props: Object,
+      attrs: Object,
+      scopedSlots?: Object,
+    } = {
+      on: {},
+      props: {},
+      attrs: {},
+    };
+
+    keys.forEach(key => {
+      const owner = isFunctional ?
+        context[key] || context.data[key] :
+        context[`$${key}`];
+
+      const value = options[key].call(context, owner);
+
+      if (key === 'listeners'){
+        key = 'on';
+      }
+
+      result[key] = value;
+    });
+
+    return result;
+  };
+};
+
+
 export const createRenderFn: CreateRenderFn = (Component, options) => {
+  const getData = preprocessOptions(options || {});
+
   return function renderHoc(
     h: (
       ctor: Object,
@@ -83,7 +125,8 @@ export const createRenderFn: CreateRenderFn = (Component, options) => {
     ) => any,
     context?: Object
   ) {
-    const data = processOptions(this || context || {}, options || {});
+    //const data = processOptions(this || context || {}, options || {});
+    const data = getData(context || this, !!context);
     const scopedSlots: Object = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
     const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || [];

@@ -26,14 +26,14 @@ const normalizeProps = (props: Object | Array<string> | void) => {
     });
     return obj;
   }
-  return props;
+  return Object.assign({}, props);
 };
 
 export const createHOC: CreateHOC = (Component, options, renderOptions) => {
   const hoc: Ctor = {
-    props: (typeof Component === 'function')
+    props: normalizeProps((typeof Component === 'function')
       ? Component.options.props
-      : Component.props,
+      : Component.props),
     mixins: [],
     name: `${Component.name || 'Anonymous'}HOC`,
     render: createRenderFnc(renderOptions),
@@ -47,7 +47,7 @@ export const createHOC: CreateHOC = (Component, options, renderOptions) => {
       if (key === 'props'){
 
         // $FlowFixMe
-        hoc[key] = strategy(normalizeProps(parent), normalizeProps(child));
+        hoc[key] = strategy(parent, normalizeProps(child));
       }else{
         hoc[key] = strategy(parent, child);
       }

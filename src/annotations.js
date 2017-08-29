@@ -9,13 +9,14 @@ export type Ctor = CompnentDefinition | Function;
 
 export type NormalizeSlots = (slots: Object) => Array<Object>;
 
-type Listeners = {
-  [eventName: string]: Function
-};
+type RenderFnOption = {
+  [name: string]: Function,
+} | (owner: Object) => RenderFnOption;
+
 export type CreateRenderFnOptions = {
-  attrs?: Object | (attrs: Object) => Object,
-  props?: Object | (props: Object) => Object,
-  on?: Listeners | (listeners: Listeners) => Listeners,
+  attrs?: RenderFnOption,
+  props?: RenderFnOption,
+  listeners?: RenderFnOption,
 };
 export type CreateRenderFn = (Component: Ctor, options?: CreateRenderFnOptions) => Function;
 export type CreateRenderFnc = (options?: CreateRenderFnOptions, Component?: Ctor) => Function;

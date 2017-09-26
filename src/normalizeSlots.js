@@ -4,6 +4,14 @@ import type {
 } from './annotations';
 
 const normalizeSlots: NormalizeSlots = (slots) => Object.keys(slots)
-  .reduce((arr, key) => arr.concat(slots[key]), []);
+  .reduce((arr, key) => {
+    slots[key].forEach(slot => {
+      if (!slot.data) {
+        slot.data = {};
+      }
+      slot.data.slot = key;
+    });
+    return arr.concat(slots[key]);
+  }, []);
 
 export default normalizeSlots;

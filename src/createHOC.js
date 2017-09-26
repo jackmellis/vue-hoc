@@ -9,6 +9,7 @@ import type {
 
 import courier from './courier';
 import {createRenderFnc} from './createRenderFn';
+import assign from './assign';
 import Vue from 'vue';
 
 const defaultStrategy = (parent, child) => child;
@@ -26,7 +27,7 @@ const normalizeProps = (props: Object | Array<string> | void) => {
     });
     return obj;
   }
-  return Object.assign({}, props);
+  return assign({}, props);
 };
 
 export const createHOC: CreateHOC = (Component, options, renderOptions) => {

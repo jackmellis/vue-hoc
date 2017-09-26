@@ -130,7 +130,7 @@ export const createRenderFn: CreateRenderFn = (Component, options) => {
     const data = getData(context || this, !!context);
     const scopedSlots: Object = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
-    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || [];
+    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
 
     data.scopedSlots = data.scopedSlots || scopedSlots;
 

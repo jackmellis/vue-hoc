@@ -3,13 +3,17 @@ import type {
   NormalizeSlots,
 } from './annotations';
 
-const normalizeSlots: NormalizeSlots = (slots) => Object.keys(slots)
+const normalizeSlots: NormalizeSlots = (slots, context) => Object.keys(slots)
   .reduce((arr, key) => {
-    slots[key].forEach(slot => {
-      if (!slot.data) {
-        slot.data = {};
+    slots[key].forEach(vnode => {
+      if (!vnode.data) {
+        vnode.data = {};
       }
-      slot.data.slot = key;
+      vnode.data.slot = key;
+
+      if (!vnode.context) {
+        vnode.context = context;
+      }
     });
     return arr.concat(slots[key]);
   }, []);

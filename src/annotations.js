@@ -4,6 +4,7 @@ export type CompnentDefinition = {
   name?: string,
   mixins?: Array<Object>,
   render?: Function,
+  $createElement: Function,
 };
 export type Ctor = CompnentDefinition | Function;
 

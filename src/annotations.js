@@ -4,10 +4,11 @@ export type CompnentDefinition = {
   name?: string,
   mixins?: Array<Object>,
   render?: Function,
+  $createElement: Function,
 };
 export type Ctor = CompnentDefinition | Function;
 
-export type NormalizeSlots = (slots: Object) => Array<Object>;
+export type NormalizeSlots = (slots: Object, context: CompnentDefinition) => Array<Object>;
 
 type RenderFnOption = {
   [name: string]: Function,

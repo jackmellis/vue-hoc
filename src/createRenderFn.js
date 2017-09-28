@@ -1,6 +1,7 @@
 // @flow
 import courier from './courier';
 import normalizeSlots from './normalizeSlots';
+import assign from './assign';
 
 import type {
   Ctor,
@@ -48,12 +49,12 @@ const createOptionHandlers = (originalOptions, keys) => {
       const optionKeys = Object.keys(option);
 
       if (!optionKeys.some(k => isFn(option[k]))){
-        options[key] = (owner) => Object.assign({}, owner, option);
+        options[key] = (owner) => assign({}, owner, option);
         return;
       }
 
       options[key] = function(owner) {
-        const result = Object.assign({}, owner);
+        const result = assign({}, owner);
         const justBind = justBindFn(key);
 
         optionKeys.forEach(k => {
@@ -129,7 +130,7 @@ export const createRenderFn: CreateRenderFn = (Component, options) => {
     const data = getData(context || this, !!context);
     const scopedSlots: Object = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
-    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots)) || [];
+    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
 
     data.scopedSlots = data.scopedSlots || scopedSlots;
 

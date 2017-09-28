@@ -1,6 +1,6 @@
 {
   "name": "vue-hoc",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "Create Higher Order Vue Components",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,6 @@
     "coverage": "nyc --reporter=html npm test",
     "debug": "inspect node_modules/ava/profile",
     "build": "babel src/ -d dist/ --source-maps",
-    "prepublishOnly": "npm test && npm run lint && npm run build",
     "flow": "flow",
     "eslint": "eslint src --fix",
     "lint": "npm run eslint && npm run flow"
@@ -51,7 +50,7 @@
     "nyc": "^11.1.0",
     "sinon": "^3.2.0",
     "vue": "^2.4.2",
-    "vuenit": "^1.0.0"
+    "vuenit": "^1.1.0"
   },
   "peerDependencies": {
     "vue": "^2.4.0"

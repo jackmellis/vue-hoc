@@ -1,4 +1,4 @@
-// @flow
+// deprecated
 function createFn(fn, args, totalArity){
   const curried = (...partialArgs) => {
     return processInvocation.call(this, fn, args.concat(partialArgs), totalArity);
@@ -15,9 +15,8 @@ function processInvocation(fn, args, totalArity){
   }
 }
 
-export default (
-  count: number,
-  fn: Function,
-): Function => {
+const courier = (count, fn) => {
   return createFn(fn, [], count);
 };
+
+export default courier;

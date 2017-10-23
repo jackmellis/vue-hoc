@@ -16,7 +16,7 @@ mount(Component);
 test('props filter through hoc into component', t => {
   const enhance = createHOCc({
   });
-  const enhanced = enhance(null, Component);
+  const enhanced = enhance(Component);
 
   const vm = mount(enhanced, {
     props : {
@@ -25,7 +25,7 @@ test('props filter through hoc into component', t => {
     }
   });
 
-  const expected = `<ul><li>foo</li><li>bah</li></ul>`;
+  const expected = '<ul><li>foo</li><li>bah</li></ul>';
 
   t.is(vm.$html, expected);
 });
@@ -48,7 +48,7 @@ test('can overwrite prop values', t => {
     }
   });
 
-  const expected = `<ul><li>bah</li><li>foo</li></ul>`;
+  const expected = '<ul><li>bah</li><li>foo</li></ul>';
 
   t.is(vm.$html, expected);
 });
@@ -73,7 +73,7 @@ test('can amend prop values with a function', t => {
     }
   });
 
-  const expected = `<ul><li>bah</li><li>foo</li></ul>`;
+  const expected = '<ul><li>bah</li><li>foo</li></ul>';
 
   t.is(vm.$html, expected);
 });
@@ -102,14 +102,14 @@ test('can add additional props', t => {
     }
   });
 
-  const expected = `<ul><li>abc</li><li>def</li></ul>`;
+  const expected = '<ul><li>abc</li><li>def</li></ul>';
 
   t.is(vm.$html, expected);
 });
 
 test('can pass props through multiple hocs', t => {
-  const hoc1 = createHOCc({}, {}, Component);
-  const hoc2 = createHOCc({}, {}, hoc1);
+  const hoc1 = createHOCc({}, {})(Component);
+  const hoc2 = createHOCc({}, {})(hoc1);
 
   const vm = mount(hoc2, {
     props : {
@@ -118,7 +118,7 @@ test('can pass props through multiple hocs', t => {
     }
   });
 
-  const expected = `<ul><li>foo</li><li>bah</li></ul>`;
+  const expected = '<ul><li>foo</li><li>bah</li></ul>';
 
   t.is(vm.$html, expected);
 });

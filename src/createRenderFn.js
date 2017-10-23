@@ -1,17 +1,7 @@
-// @flow
-import courier from './courier';
 import normalizeSlots from './normalizeSlots';
 import assign from './assign';
 
-import type {
-  Ctor,
-  CreateRenderFnOptions,
-  CreateRenderFn,
-  CreateRenderFnc,
-} from './annotations';
-
 const isObject = test => Object.prototype.toString.call(test) === '[object Object]';
-const isFn = test => Object.prototype.toString.call(test) === '[object Function]';
 
 const justBindOptions = [
   'listeners',
@@ -27,9 +17,7 @@ const getOptionsKeys = options => Object
   .filter((k, i, a) => a.indexOf(k) === i);
 
 const createOptionHandlers = (originalOptions, keys) => {
-  const options: {
-    [dataName: string]: Function
-  } = {};
+  const options = {};
 
   keys.forEach(key => {
     const option = originalOptions[key];
@@ -39,16 +27,15 @@ const createOptionHandlers = (originalOptions, keys) => {
       return;
     }
 
-    if (isFn(option)){
-      // $FlowFixMe
+    if (typeof option === 'function'){
       options[key] = option;
       return;
     }
 
-    if (isObject(option)){
+    if (typeof option === 'object' && isObject(option)){
       const optionKeys = Object.keys(option);
 
-      if (!optionKeys.some(k => isFn(option[k]))){
+      if (!optionKeys.some(k => typeof option[k] === 'function')){
         options[key] = (owner) => assign({}, owner, option);
         return;
       }
@@ -60,7 +47,7 @@ const createOptionHandlers = (originalOptions, keys) => {
         optionKeys.forEach(k => {
           let value = option && option[k];
 
-          if (isFn(value)){
+          if (typeof value === 'function'){
             if (justBind){
               value = value.bind(this);
             }else{
@@ -85,12 +72,7 @@ const preprocessOptions = (originalOptions) => {
   const options = createOptionHandlers(originalOptions, keys);
 
   return (context, isFunctional) => {
-    const result: {
-      on: Object,
-      props: Object,
-      attrs: Object,
-      scopedSlots?: Object,
-    } = {
+    const result = {
       on: {},
       props: {},
       attrs: {},
@@ -115,22 +97,14 @@ const preprocessOptions = (originalOptions) => {
 };
 
 
-export const createRenderFn: CreateRenderFn = (Component, options) => {
+export const createRenderFn = (Component, options) => {
   const getData = preprocessOptions(options || {});
 
-  return function renderHoc(
-    h: (
-      ctor: Object,
-      data: Object,
-      slots: Array<any>
-    ) => any,
-    context?: Object
-  ) {
-    //const data = processOptions(this || context || {}, options || {});
+  return function renderHoc(h, context) {
     const data = getData(context || this, !!context);
-    const scopedSlots: Object = (context && context.data && context.data.scopedSlots) ||
+    const scopedSlots = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
-    const slots: Array<any> = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
+    const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
 
     data.scopedSlots = data.scopedSlots || scopedSlots;
 
@@ -138,9 +112,8 @@ export const createRenderFn: CreateRenderFn = (Component, options) => {
   };
 };
 
-export const createRenderFnc: CreateRenderFnc = courier(2, (
-  options: CreateRenderFnOptions,
-  Component: Ctor
-) => {
-  return createRenderFn(Component, options);
-});
+export const createRenderFnc = (options) => {
+  const curried = (Component) => createRenderFn(Component, options);
+  curried.curried = true;
+  return curried;
+};

@@ -1,20 +1,10 @@
-// @flow
-import type {
-  Ctor,
-  CreateRenderFnOptions,
-  CreateHOCOptions,
-  CreateHOC,
-  CreateHOCc,
-} from './annotations';
-
-import courier from './courier';
-import {createRenderFnc} from './createRenderFn';
+import { createRenderFnc } from './createRenderFn';
 import assign from './assign';
 import Vue from 'vue';
 
 const defaultStrategy = (parent, child) => child;
 
-const normalizeProps = (props: Object | Array<string> | void) => {
+const normalizeProps = (props) => {
   if (!props){
     return {};
   }
@@ -30,8 +20,8 @@ const normalizeProps = (props: Object | Array<string> | void) => {
   return assign({}, props);
 };
 
-export const createHOC: CreateHOC = (Component, options, renderOptions) => {
-  const hoc: Ctor = {
+export const createHOC = (Component, options, renderOptions) => {
+  const hoc = {
     props: normalizeProps((typeof Component === 'function')
       ? Component.options.props
       : Component.props),
@@ -43,11 +33,9 @@ export const createHOC: CreateHOC = (Component, options, renderOptions) => {
     Object.keys(options).forEach((key) => {
       const child = options && options[key];
       const parent = hoc[key];
-      const strategy: Function = Vue.config.optionMergeStrategies[key] || defaultStrategy;
+      const strategy = Vue.config.optionMergeStrategies[key] || defaultStrategy;
 
       if (key === 'props'){
-
-        // $FlowFixMe
         hoc[key] = strategy(parent, normalizeProps(child));
       }else{
         hoc[key] = strategy(parent, child);
@@ -68,12 +56,13 @@ export const createHOC: CreateHOC = (Component, options, renderOptions) => {
   return hoc;
 };
 
-export const createHOCc: CreateHOCc = courier(3, (
-  options: CreateHOCOptions,
-  renderOptions: CreateRenderFnOptions,
-  Component: Ctor
+export const createHOCc = (
+  options,
+  renderOptions,
 ) => {
-  return createHOC(Component, options, renderOptions);
-});
+  const curried = (Component) => createHOC(Component, options, renderOptions);
+  curried.curried = true;
+  return curried;
+};
 
 export default createHOC;

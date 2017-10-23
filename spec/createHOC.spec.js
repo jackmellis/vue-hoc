@@ -21,7 +21,7 @@ test('wraps a component in a hoc', t => {
 });
 
 test('wraps a component in a curried hoc', t => {
-  const hoc = createHOCc(null)(null)(Component);
+  const hoc = createHOCc(null, null)(Component);
   const vm = mount(hoc, {
     props: {
       propA: 'foo'

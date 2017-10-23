@@ -1,13 +1,8 @@
-// @flow
-import type {
-  NormalizeSlots,
-} from './annotations';
-
 function isTextNode(node) {
   return node != null && node.text != null && node.isComment === false;
 }
 
-const normalizeSlots: NormalizeSlots = (slots, context) => Object.keys(slots)
+const normalizeSlots = (slots, context) => Object.keys(slots)
   .reduce((arr, key) => {
     slots[key].forEach(vnode => {
       if (!vnode.context) {

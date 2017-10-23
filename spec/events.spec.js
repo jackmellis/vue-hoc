@@ -22,8 +22,7 @@ test('it emits an event', t => {
       button1click : spy
     }
   });
-
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.true(spy.called);
 });
@@ -42,7 +41,7 @@ test('it emits an event through a hoc', t => {
   };
   const vm = mount(C2);
 
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.true(spy.called);
 });
@@ -65,7 +64,7 @@ test('it can intercept an event', t => {
   };
   const vm = mount(C2);
 
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.false(spy1.called);
   t.true(spy2.called);
@@ -75,7 +74,7 @@ test('it can bubble an event (function syntax)', t => {
   const spy1 = sinon.spy(), spy2 = sinon.spy();
   const hoc = createHOC(Component, {
     render : createRenderFn(Component, {
-      listeners(listeners){
+      listeners(){
         return {
           button1click : () => {
             spy2();
@@ -96,7 +95,7 @@ test('it can bubble an event (function syntax)', t => {
   };
   const vm = mount(C2);
   t.log(vm.$html);
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.true(spy1.called);
   t.true(spy2.called);
@@ -125,7 +124,7 @@ test('it can bubble an event (object syntax)', t => {
   };
   const vm = mount(C2);
 
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.true(spy1.called);
   t.true(spy2.called);
@@ -133,9 +132,9 @@ test('it can bubble an event (object syntax)', t => {
 
 test('events bubble through multiple hocs', t => {
   const spy = sinon.spy();
-  const hoc1 = createHOCc({}, null, Component);
-  const hoc2 = createHOCc({}, null, hoc1);
-  const hoc3 = createHOCc({}, null, hoc2);
+  const hoc1 = createHOCc({}, null)(Component);
+  const hoc2 = createHOCc({}, null)(hoc1);
+  const hoc3 = createHOCc({}, null)(hoc2);
   const C2 = {
     components : {hoc3},
     template : '<hoc3 @button1click="callSpy"/>',
@@ -147,7 +146,7 @@ test('events bubble through multiple hocs', t => {
   };
   const vm = mount(C2);
 
-  vm.$find('#button1').$trigger('click');
+  vm.$findOne('#button1').$trigger('click');
 
   t.true(spy.called);
 });

@@ -1,5 +1,5 @@
 // IE9-11 do not support `Object.assign`
-const assign = Object.assign || function (target, ...sources) {
+const poly = function (target, ...sources) {
   if (target == null) {
     throw new TypeError('Uncaught TypeError: Cannot convert undefined or null to object');
   }
@@ -11,13 +11,20 @@ const assign = Object.assign || function (target, ...sources) {
     }
 
     for (let key in source) {
-      if (source.hasOwnProperty(key)) {
-        target[key] = source[key];
+      if (Object.hasOwnProperty.call(source, key)) {
+        Object.defineProperty(target, key, {
+          enumerable: true,
+          writable: true,
+          value: source[key],
+        });
       }
     }
   }
 
+  // $FlowFixMe
   return target;
 };
+
+const assign = Object.assign || poly;
 
 export default assign;

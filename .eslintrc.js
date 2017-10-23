@@ -1,8 +1,6 @@
 module.exports = {
     "parser": "babel-eslint",
-    "plugins": [
-      "flowtype",
-    ],
+    "plugins": [],
     "env": {
         "browser": true,
         "es6": true

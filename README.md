@@ -177,7 +177,7 @@ Unlike the previous variants, this will *not* automatically merge with the exist
 
 ### createHOCc
 ```js
-(options: Object, renderWith: Object, Component: Object | Function) => Object;
+(options: Object, renderWith?: Object) => (Component: Object | Function) => Object;
 ```
 This is a curried variation of the `createHOC` method. This allows you to build a HOC creator and pass in a component at the end.
 
@@ -198,7 +198,7 @@ See [renderWith](#renderwith).
 
 ### createRenderFnc
 ```js
-(options: Object, Component: Object)=> Function;
+(options: Object) => (Component: Object)=> Function;
 ```
 A curried version of `createRenderFn`.
 

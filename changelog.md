@@ -1,4 +1,6 @@
 # Change Log
+## 0.2.1
+- allow slots to contain both elements and text nodes together
 
 ## 0.2.0
 - `createHOCc` and `createRenderFnc` are now not *fully* curried methods, each takes configuration arguments and returns a function that accepts a component.

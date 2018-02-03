@@ -1,4 +1,5 @@
 import normalizeSlots from './normalizeSlots';
+import normalizeProps from './normalizeProps';
 import assign from './assign';
 
 const isObject = test => Object.prototype.toString.call(test) === '[object Object]';
@@ -96,17 +97,33 @@ const preprocessOptions = (originalOptions) => {
   };
 };
 
+const getUnusedProps = (Component, props) => {
+  const result = {};
+  const target = normalizeProps((typeof Component === 'function') ? Component.options.props : Component.props);
+
+  Object.keys(props).forEach((prop) => {
+    if (target[prop] === undefined) {
+      result[prop] = props[prop];
+    }
+  });
+
+  return result;
+};
+
 
 export const createRenderFn = (Component, options) => {
   const getData = preprocessOptions(options || {});
 
   return function renderHoc(h, context) {
+    debugger;
     const data = getData(context || this, !!context);
     const scopedSlots = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
     const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
+    const unusedProps = getUnusedProps(Component, data.props);
 
     data.scopedSlots = data.scopedSlots || scopedSlots;
+    data.attrs = assign({}, unusedProps, data.attrs);
 
     return h(Component, data, slots);
   };

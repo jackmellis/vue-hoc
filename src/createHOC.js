@@ -1,24 +1,8 @@
 import { createRenderFnc } from './createRenderFn';
-import assign from './assign';
+import normalizeProps from './normalizeProps';
 import Vue from 'vue';
 
 const defaultStrategy = (parent, child) => child;
-
-const normalizeProps = (props) => {
-  if (!props){
-    return {};
-  }
-  if (Array.isArray(props)){
-    const obj = {};
-    props.forEach((key) => {
-      if (typeof key === 'string'){
-        obj[key] = {};
-      }
-    });
-    return obj;
-  }
-  return assign({}, props);
-};
 
 export const createHOC = (Component, options, renderOptions) => {
   const hoc = {

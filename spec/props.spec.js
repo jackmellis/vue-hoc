@@ -122,3 +122,61 @@ test('can pass props through multiple hocs', t => {
 
   t.is(vm.$html, expected);
 });
+
+test('unkonwn props are passed as attributes', t => {
+  const withProp = createHOCc(null, {
+    props: {
+      unknown: 'some-value'
+    },
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.unknown, undefined);
+      t.is(this.$props.unknown, undefined);
+      t.is(this.$attrs.unknown, 'some-value');
+    },
+  });
+  const hoc = withProp(withCreated(Component));
+
+  mount(hoc);
+});
+
+test('does not overwrite existing attributes', t => {
+  const withProp = createHOCc(null, {
+    props: {
+      unknown: 'some-value'
+    },
+    attrs: {
+      unknown: 'unknown',
+    },
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.unknown, undefined);
+      t.is(this.$props.unknown, undefined);
+      t.is(this.$attrs.unknown, 'unknown');
+    },
+  });
+  const hoc = withProp(withCreated(Component));
+
+  mount(hoc);
+});
+
+test('does not include known props', t => {
+  const withProp = createHOCc(null, {
+    props: {
+      unknown: 'some-value',
+      propA: 'some-value',
+    },
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.propA, 'some-value');
+      t.is(this.$props.propA, 'some-value');
+      t.is(this.$attrs.propA, undefined);
+    },
+  });
+  const hoc = withProp(withCreated(Component));
+
+  mount(hoc);
+});

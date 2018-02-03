@@ -1,4 +1,7 @@
 # Change Log
+## 0.3.0
+- unknown render props are passed to the component as attributes
+
 ## 0.2.1
 - allow slots to contain both elements and text nodes together
 

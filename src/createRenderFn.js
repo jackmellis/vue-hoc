@@ -115,7 +115,6 @@ export const createRenderFn = (Component, options) => {
   const getData = preprocessOptions(options || {});
 
   return function renderHoc(h, context) {
-    debugger;
     const data = getData(context || this, !!context);
     const scopedSlots = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);

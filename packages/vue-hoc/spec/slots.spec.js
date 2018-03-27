@@ -58,43 +58,91 @@ test('it renders multiple slots', t => {
   t.true(vm.$contains('#fourth'));
 });
 
-test('it renders text slot content', t => {
+test('(Component) it renders text slot content', t => {
   const hoc = createHOC(Component);
   const vm = mount(hoc, {
     slots: 'some text',
   });
+  const html = vm.$html;
 
-  t.true(vm.$html.includes('some text'));
+  t.true(html.includes('some text'));
 });
 
-test('it renders a mix of text and tags', t => {
+test('(string) it renders text slot content', t => {
+  const hoc = createHOC('button');
+  const vm = mount(hoc, {
+    slots: 'some text',
+  });
+  const html = vm.$html;
+  t.true(html.includes('some text'));
+});
+
+test('(Component) it renders a mix of text and tags', t => {
   const hoc = createHOC(Component);
   const vm = mount(hoc, {
     slots: 'some text <span id="icon">icon</span> some more text',
   });
+  const html = vm.$html;
 
   t.true(vm.$contains('#icon'));
-  t.true(vm.$html.includes('some text'));
-  t.true(vm.$html.includes('some more text'));
+  t.true(html.includes('some text'));
+  t.true(html.includes('some more text'));
 });
 
-test('it renders a mix of tags and text', t => {
+test('(string) it renders a mix of text and tags', t => {
+  const hoc = createHOC('button');
+  const vm = mount(hoc, {
+    slots: 'some text <span id="icon">icon</span> some more text',
+  });
+  const html = vm.$html;
+
+  t.true(vm.$contains('#icon'));
+  t.true(html.includes('some text'));
+  t.true(html.includes('some more text'));
+});
+
+test('(Component) it renders a mix of tags and text', t => {
   const hoc = createHOC(Component);
   const vm = mount(hoc, {
     slots: '<span id="icon">icon</span> some text',
   });
+  const html = vm.$html;
 
   t.true(vm.$contains('#icon'));
-  t.true(vm.$html.includes('some text'));
+  t.true(html.includes('some text'));
 });
 
-test('it renders a mix of tags text and templates', t => {
+test('(string) it renders a mix of tags and text', t => {
+  const hoc = createHOC('button');
+  const vm = mount(hoc, {
+    slots: '<span id="icon">icon</span> some text',
+  });
+  const html = vm.$html;
+
+  t.true(vm.$contains('#icon'));
+  t.true(html.includes('some text'));
+});
+
+test('(Component) it renders a mix of tags text and templates', t => {
   const hoc = createHOC(Component);
   const vm = mount(hoc, {
     slots: '<span id="icon">icon</span> some text<template><div>some template stuff</div>!</template>',
   });
+  const html = vm.$html;
 
   t.true(vm.$contains('#icon'));
-  t.true(vm.$html.includes('some text'));
-  t.true(vm.$html.includes('some template stuff'));
+  t.true(html.includes('some text'));
+  t.true(html.includes('some template stuff'));
+});
+
+test('(string) it renders a mix of tags text and templates', t => {
+  const hoc = createHOC('button');
+  const vm = mount(hoc, {
+    slots: '<span id="icon">icon</span> some text<template><div>some template stuff</div>!</template>',
+  });
+  const html = vm.$html;
+
+  t.true(vm.$contains('#icon'));
+  t.true(html.includes('some text'));
+  t.true(html.includes('some template stuff'));
 });

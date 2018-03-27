@@ -1,4 +1,7 @@
 # Change Log
+## 0.3.2
+- rendering a html element component (i.e. calling `h('button')`) failed to render child text nodes
+
 ## 0.3.0
 - unknown render props are passed to the component as attributes
 

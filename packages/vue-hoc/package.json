@@ -1,4 +1,5 @@
 {
+  "dependencies": {},
   "name": "vue-hoc",
   "version": "0.0.0",
   "description": "Create Higher Order Vue Components",

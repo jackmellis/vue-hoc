@@ -1,27 +1,14 @@
 {
-  "name": "vue-hoc",
-  "version": "0.3.1",
-  "description": "Create Higher Order Vue Components",
-  "main": "dist/index.js",
+  "name": "vue-hoc-repo",
+  "version": "0.0.0",
+  "description": "",
+  "main": ".eslintrc.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "npm run build && ava",
-    "coverage": "nyc --reporter=html npm test",
-    "debug": "inspect node_modules/ava/profile",
-    "build": "babel src/ -d dist/ --source-maps",
-    "eslint": "eslint src",
-    "lint": "npm run eslint"
-  },
-  "ava": {
-    "files": [
-      "spec/**/*.spec.js"
-    ],
-    "source": [
-      "dist/**/*.js"
-    ],
-    "require": [
-      "./spec/hooks.js"
-    ],
-    "concurrency": 8
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -34,21 +21,26 @@
   },
   "homepage": "https://github.com/jackmellis/vue-hoc#readme",
   "devDependencies": {
-    "ava": "^0.22.0",
+    "ava": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "7.2.3",
-    "babel-preset-env": "^1.6.0",
-    "browser-env": "^3.1.2",
-    "eslint": "^4.3.0",
-    "eslint-plugin-import": "^2.7.0",
-    "inspect-process": "^0.5.0",
-    "nyc": "^11.1.0",
-    "sinon": "^3.2.0",
-    "vue": "^2.4.4",
-    "vuenit": "^1.1.0"
-  },
-  "peerDependencies": {
-    "vue": "^2.4.0"
+    "babel-eslint": "^8.2.2",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "browser-env": "^3.2.5",
+    "cross-env": "^5.1.4",
+    "eslint": "^4.19.1",
+    "eslint-plugin-import": "^2.10.0",
+    "lerna": "^2.10.0",
+    "module-alias": "^2.0.6",
+    "nyc": "^11.6.0",
+    "require-extension-hooks": "^0.3.2",
+    "require-extension-hooks-babel": "^0.1.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.3",
+    "sinon": "^4.5.0",
+    "vue": "^2.5.16",
+    "vuenit": "^1.1.2",
+    "vuex": "^3.0.1"
   }
 }

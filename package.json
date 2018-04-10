@@ -33,6 +33,7 @@
     "eslint-plugin-import": "^2.10.0",
     "lerna": "^2.10.0",
     "module-alias": "^2.0.6",
+    "mono-semantic": "^0.1.0-beta.3",
     "nyc": "^11.6.0",
     "require-extension-hooks": "^0.3.2",
     "require-extension-hooks-babel": "^0.1.1",

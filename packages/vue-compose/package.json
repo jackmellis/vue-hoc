@@ -1,0 +1,38 @@
+{
+  "name": "vue-compose",
+  "version": "0.0.0",
+  "description": "Create awesome Vue HOCs",
+  "main": "dist/vue-compose.js",
+  "module": "dist/vue-compose.es.js",
+  "scripts": {
+    "test": "ava",
+    "coverage": "nyc --reporter=html yarn test",
+    "lint": "eslint src",
+    "build": "rm -rf dist && cross-env NODE_ENV=production rollup -c",
+    "prepublish": "yarn build"
+  },
+  "ava": {
+  "files": [
+    "spec/**/*.spec.js"
+  ],
+  "source": [
+    "src/**/*.js"
+  ],
+  "require": [
+    "./spec/hooks.js"
+  ]
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/vue-hoc.git"
+  },
+  "author": "Jack Ellis",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jackmellis/vue-hoc/issues"
+  },
+  "homepage": "https://github.com/jackmellis/vue-hoc#readme",
+  "dependencies": {
+    "vue-hoc": "link:../vue-hoc"
+  }
+}

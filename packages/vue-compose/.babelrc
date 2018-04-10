@@ -1,0 +1,30 @@
+{
+  "env": {
+    "production": {
+      "presets" : [
+        ["env", {
+          "targets" : {
+            "browsers" : ["last 2 versions"],
+            "node" : "current",
+          },
+          "modules": false
+          }]
+        ],
+        "sourceMaps" : true,
+        "plugins": ["external-helpers"],
+    },
+    "test": {
+      "presets" : [
+        ["env", {
+          "targets" : {
+            "browsers" : ["last 2 versions"],
+            "node" : "current",
+          },
+          "modules": "commonjs"
+          }]
+      ],
+      "sourceMaps" : true,
+      "plugins": []
+    }
+  }
+}

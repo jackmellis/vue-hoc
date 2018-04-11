@@ -1,5 +1,4 @@
 {
-  "dependencies": {},
   "name": "vue-hoc",
   "version": "0.0.0",
   "description": "Create Higher Order Vue Components",
@@ -31,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/jackmellis/vue-hoc/issues"
   },
-  "homepage": "https://github.com/jackmellis/vue-hoc#readme",
+  "homepage": "https://github.com/jackmellis/vue-hoc/blob/master/packages/vue-hoc/README.md",
   "author": "Jack Ellis",
   "license": "Apache-2.0",
   "peerDependencies": {

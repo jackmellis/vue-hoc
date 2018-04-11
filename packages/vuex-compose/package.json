@@ -1,0 +1,43 @@
+{
+  "name": "vuex-compose",
+  "version": "0.0.0",
+  "description": "Connect components through HOCs",
+  "main": "dist/vuex-compose.js",
+  "module": "dist/vuex-compose.es.js",
+  "scripts": {
+    "test": "ava",
+    "coverage": "nyc --reporter=html yarn test",
+    "debug": "inspect ../../node_modules/ava/profile",
+    "lint": "eslint src",
+    "build": "rm -rf dist && cross-env NODE_ENV=production rollup -c",
+    "prepublish": "yarn build"
+  },
+  "ava": {
+    "files": [
+      "spec/**/*.spec.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "./spec/hooks.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackmellis/vue-hoc.git"
+  },
+  "author": "Jack Ellis",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jackmellis/vue-hoc/issues"
+  },
+  "homepage": "https://github.com/jackmellis/vue-hoc#readme",
+  "dependencies": {
+    "vue-hoc": "link:../vue-hoc",
+    "vue-compose": "link:../vue-compose"
+  },
+  "peerDependencies": {
+    "vuex": "^2.0.0"
+  }
+}

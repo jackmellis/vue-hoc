@@ -3,6 +3,8 @@ Create Higher Order Vue Components
 
 Inspired by https://github.com/vuejs/vue/issues/6201
 
+Sister projects: [vue-compose](https://www.npmjs.com/package/vue-compose) and [vuex-compose](https://www.npmjs.com/package/vuex-compose)
+
 ## Installation
 ```
 npm install --save vue-hoc

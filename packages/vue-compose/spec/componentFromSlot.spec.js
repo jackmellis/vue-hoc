@@ -41,13 +41,12 @@ test('it can pass additional properties to the slot', t => {
   t.is(vm.$html, '<div id="inner_id" width="50" class="myClass" style="height: 400px; width: 50%;">Hello world</div>');
 });
 
-test.failing('it can render another component', t => {
+test('it can render another component', t => {
   const Foo = {
     template: '<input id="foo" type="text">'
   };
   mount(Foo);
-  const Bah = componentFromSlot();
-  const enhance = compose(
+  const Bah = compose(
     withProps({
       width: 50,
     }),
@@ -59,18 +58,38 @@ test.failing('it can render another component', t => {
     }),
     withClass('myClass'),
     acceptProps(['width']),
-  );
-  const enhanced = enhance(Bah);
+  )(componentFromSlot());
 
   const wrapper = {
-    components: {Foo, Bah: enhanced},
+    components: {Foo, Bah},
     template: '<Bah><Foo/></Bah>'
   };
 
   const vm = mount(wrapper);
 
   const actual = vm.$html;
-  const expected = '<input id="foo" type="text" class="myClass" style="height: 400px; width: 50%;">';
+  const expected = '<input id="foo" type="text" width="50" class="myClass" style="height: 400px; width: 50%;">';
+
+  t.is(actual, expected);
+});
+
+test('it passes props to the inner componet', t => {
+  const Foo = {
+    template: '<div id="foo">{{value}}</div>',
+    props: ['value'],
+  };
+  mount(Foo);
+  const Bah = componentFromSlot();
+
+  const Wrapper = {
+    components: {Foo, Bah},
+    template: '<Bah value="some value"><Foo/></Bah>',
+  };
+
+  const vm = mount(Wrapper);
+
+  const actual = vm.$html;
+  const expected = '<div id="foo" value="some value">some value</div>';
 
   t.is(actual, expected);
 });

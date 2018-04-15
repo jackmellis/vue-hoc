@@ -6,6 +6,7 @@
   "module": "dist/vue-compose.es.js",
   "scripts": {
     "test": "ava",
+    "debug": "inspect ../../node_modules/ava/profile",
     "coverage": "nyc --reporter=html yarn test",
     "lint": "eslint src",
     "build": "rm -rf dist && cross-env NODE_ENV=production rollup -c",

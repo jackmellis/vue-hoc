@@ -3,21 +3,29 @@ import assign from '../utils/assign';
 const componentFromSlot = (options = {}) => {
   return assign({
     name: 'ComponentFromSlot',
-    render(h){
-      const children = this.$slots.default; //children;
-      if (children.length !== 1){
-        throw new Error('ComponentFromSlot must be used with only 1 root element');
+    render(){
+      const props = assign({}, this.$attrs, this.$props );
+      let vNode;
+
+      if (this.$scopedSlots.children) {
+        vNode = this.$scopedSlots.children(props);
+      }
+      if (this.$scopedSlots.default) {
+        vNode = this.$scopeSlots.default(props)[0];
+      }
+      if (this.$slots.default) {
+        const slot = this.$slots.default[0];
+        const options = slot.componentOptions || {};
+        const propsData = options.propsData = options.propsData || {};
+        Object.assign(propsData, props);
+        vNode = slot;
       }
 
-      const slot = children[0];
-      const tag = slot.tag;
-      const data = assign({}, this, slot.data);
-
-      if (typeof tag !== 'string'){
-        throw new Error('The root element of ComponentFromSlot must be a HTML element');
+      if (vNode) {
+        return vNode;
       }
 
-      return h(tag, data, slot.children);
+      throw new Error('No slot content for ComponentFromSlot component');
     }
   }, options);
 };

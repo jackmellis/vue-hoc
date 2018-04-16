@@ -232,6 +232,14 @@ Adds classes to the base component.
 ```
 Adds styles to the base component.
 
+#### provide
+```js
+(
+  provide: Object | () => Object
+) => (Component) => Component;
+```
+Leverages Vue's `provide/inject` functionality. Use in conjunction with the `inject` method.
+
 ### Mutators
 Mutators don't create a new HOC, but actually **mutate** the provided component with new attributes.
 #### withComputed
@@ -290,6 +298,14 @@ compose(
 ```
 Sets the name of the component.
 
+### inject
+```js
+(
+  inject: Array<string> | Object
+) => (Component) => Component;
+```
+Injects data into the component provided by `provide`.
+
 ### Utilities
 #### compose
 ```js
@@ -330,11 +346,13 @@ or:
 ```
 Creates a component that just outputs its slot content. This is useful if you want to apply styles etc. through a component, but don't want to render additional html elements.
 
+Any props passed to this component will be passed through to the slot component.
+
 > NOTE: This is still an experimental feature and should be used with caution.
 
 A couple of important notes:
 - There must only be one root element inside the compponent
-- The root element must be a regular html element
+- For multiple root elements, use a `<template>`
 
 ```js
 const enhance = compose(

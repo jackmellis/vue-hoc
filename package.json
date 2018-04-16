@@ -8,7 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pre": "mono-semantic --loglevel info --debug false pre",
+    "publish": "mono-semantic --loglevel info --debug false publish",
+    "post": "mono-semantic --loglevel info --debug false pre"
   },
   "repository": {
     "type": "git",

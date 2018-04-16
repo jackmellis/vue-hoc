@@ -10,7 +10,7 @@
   "scripts": {
     "pre": "mono-semantic --loglevel info --debug false pre",
     "publish": "mono-semantic --loglevel info --debug false publish",
-    "post": "mono-semantic --loglevel info --debug false pre"
+    "post": "mono-semantic --loglevel info --debug false post"
   },
   "repository": {
     "type": "git",

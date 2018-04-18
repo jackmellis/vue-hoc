@@ -4,11 +4,7 @@ function isTextNode(node) {
 
 const normalizeSlots = (slots, context) => Object.keys(slots)
   .reduce((arr, key) => {
-    let template = false;
     slots[key].forEach((vnode) => {
-      if (isTextNode(vnode) && !template && slots[key].length > 1) {
-        slots[key] = context.$createElement('span', {}, slots[key]);
-      }
       if (!vnode.context) {
         slots[key].context = context;
         if (!vnode.data) {

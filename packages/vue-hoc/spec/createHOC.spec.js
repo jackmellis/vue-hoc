@@ -83,3 +83,22 @@ test('provide props to the hoc', t => {
   t.true(vm.$html.includes('from hoc'));
   t.false(vm.$html.includes('foo'));
 });
+
+test('provide string element in a curried hoc should not contain element not provided', t => {
+  const hoc = createHOCc(null, null)('div')
+  const vm = mount(hoc, {
+    slots: {
+      default: 
+        'foo' +
+        '<div>another foo</div>'
+    }
+  });
+
+  t.is(vm.$html,
+    '<div>' +
+      'foo' +
+      '<div>another foo</div>' +
+    '</div>'
+  );
+  t.false(vm.$html.includes('<template>'));
+})

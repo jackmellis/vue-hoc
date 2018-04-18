@@ -4,7 +4,6 @@ function isTextNode(node) {
 
 const normalizeSlots = (slots, context) => Object.keys(slots)
   .reduce((arr, key) => {
-    let template = false;
     slots[key].forEach((vnode) => {
       if (!vnode.context) {
         slots[key].context = context;

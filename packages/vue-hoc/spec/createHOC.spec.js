@@ -93,6 +93,7 @@ test('provide string element in a curried hoc should not contain element not pro
         '<div>another foo</div>'
     }
   });
+  
   t.is(vm.$html,
     '<div>' +
       'foo' +

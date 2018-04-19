@@ -93,11 +93,12 @@ test('provide string element in a curried hoc should not contain element not pro
         '<div>another foo</div>'
     }
   });
-  
+
   t.is(vm.$html,
     '<div>' +
       'foo' +
       '<div>another foo</div>' +
     '</div>'
   );
+  t.false(vm.$html.includes('<template>'));
 })

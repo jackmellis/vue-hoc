@@ -1,7 +1,3 @@
-function isTextNode(node) {
-  return node != null && node.text != null && node.isComment === false;
-}
-
 const normalizeSlots = (slots, context) => Object.keys(slots)
   .reduce((arr, key) => {
     slots[key].forEach((vnode) => {

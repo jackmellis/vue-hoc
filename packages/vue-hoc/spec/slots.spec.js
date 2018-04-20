@@ -1,7 +1,11 @@
 import test from 'ava';
 import sinon from 'sinon';
 import {mount} from 'vuenit';
-import {createHOC, createRenderFn} from '../src';
+import {
+  createHOC,
+  createRenderFn,
+  createHOCc,
+} from '../src';
 
 const Component = {
   template : `<div>
@@ -145,4 +149,23 @@ test('(string) it renders a mix of tags text and templates', t => {
   t.true(vm.$contains('#icon'));
   t.true(html.includes('some text'));
   t.true(html.includes('some template stuff'));
+});
+
+test('provide string element in a curried hoc should not contain element not provided', t => {
+  const hoc = createHOCc(null, null)('div')
+  const vm = mount(hoc, {
+    slots: {
+      default:
+        'foo' +
+        '<div>another foo</div>'
+    }
+  });
+
+  t.is(vm.$html,
+    '<div>' +
+      'foo' +
+      '<div>another foo</div>' +
+    '</div>'
+  );
+  t.false(vm.$html.includes('<template>'));
 });

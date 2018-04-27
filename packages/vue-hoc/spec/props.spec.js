@@ -138,7 +138,11 @@ test('unkonwn props are passed as attributes', t => {
   });
   const hoc = withProp(withCreated(Component));
 
-  mount(hoc);
+  const html = mount(hoc).$html;
+
+  const expected = '<ul unknown="some-value"><li></li><li></li></ul>';
+
+  t.is(html, expected);
 });
 
 test('does not overwrite existing attributes', t => {
@@ -179,4 +183,31 @@ test('does not include known props', t => {
   const hoc = withProp(withCreated(Component));
 
   mount(hoc);
+});
+
+test.failing('knows about mixin props', t => {
+  const C = Object.assign({}, Component, {
+    mixins: [
+      {
+        props: [ 'mixinProp' ],
+      },
+    ],
+  });
+  const withProp = createHOCc(null, {
+    props: {
+      mixinProp: 'some-value',
+    },
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.mixinProp, 'some-value');
+    },
+  });
+  const hoc = withProp(withCreated(C));
+
+  const html = mount(hoc).$html;
+
+  const expected = '<ul><li></li><li></li></ul>';
+
+  t.is(html, expected);
 });

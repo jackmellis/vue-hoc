@@ -1,5 +1,5 @@
 import normalizeSlots from './normalizeSlots';
-import normalizeProps from './normalizeProps';
+import getProps from './getProps';
 import assign from './assign';
 
 const isObject = test => Object.prototype.toString.call(test) === '[object Object]';
@@ -99,7 +99,7 @@ const preprocessOptions = (originalOptions) => {
 
 const getUnusedProps = (Component, props) => {
   const result = {};
-  const target = normalizeProps((typeof Component === 'function') ? Component.options.props : Component.props);
+  const target = getProps(Component);
 
   Object.keys(props).forEach((prop) => {
     if (target[prop] === undefined) {

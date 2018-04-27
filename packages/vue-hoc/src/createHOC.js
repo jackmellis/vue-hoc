@@ -1,29 +1,29 @@
 import { createRenderFnc } from './createRenderFn';
-import normalizeProps from './normalizeProps';
+import getProps from './getProps';
+import getComponentOptions from './getComponentOptions';
 import Vue from 'vue';
 
 const defaultStrategy = (parent, child) => child;
 
+
 export const createHOC = (Component, options, renderOptions) => {
+  const target = getComponentOptions(Component);
   const hoc = {
-    props: normalizeProps((typeof Component === 'function')
-      ? Component.options.props
-      : Component.props),
+    props: getProps(target),
     mixins: [],
-    name: `${Component.name || 'Anonymous'}HOC`,
+    name: `${target.name || 'Anonymous'}HOC`,
     render: createRenderFnc(renderOptions),
   };
   if (options){
     Object.keys(options).forEach((key) => {
-      const child = options && options[key];
+      let child = options && options[key];
       const parent = hoc[key];
       const strategy = Vue.config.optionMergeStrategies[key] || defaultStrategy;
 
-      if (key === 'props'){
-        hoc[key] = strategy(parent, normalizeProps(child));
-      }else{
-        hoc[key] = strategy(parent, child);
+      if (key === 'props') {
+        child = getProps(options);
       }
+      hoc[key] = strategy(parent, child);
     });
   }
 

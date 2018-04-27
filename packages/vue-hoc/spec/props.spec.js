@@ -185,7 +185,7 @@ test('does not include known props', t => {
   mount(hoc);
 });
 
-test.failing('knows about mixin props', t => {
+test('knows about mixin props', t => {
   const C = Object.assign({}, Component, {
     mixins: [
       {

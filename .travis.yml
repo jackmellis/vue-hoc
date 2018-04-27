@@ -1,0 +1,12 @@
+language: node_js
+install:
+  - yarn install
+  - yarn lerna run build
+script:
+  - yarn lerna run lint
+  - yarn lerna run test
+after_success:
+  - yarn run pre
+  - yarn run publish
+  - yarn run post
+  - travis/push.sh

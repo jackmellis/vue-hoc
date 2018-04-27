@@ -1,5 +1,6 @@
 language: node_js
-node-js: node
+node-js:
+  - "7"
 install:
   - yarn install
   - yarn lerna run build

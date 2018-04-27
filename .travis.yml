@@ -1,4 +1,5 @@
 language: node_js
+node-js: node
 install:
   - yarn install
   - yarn lerna run build

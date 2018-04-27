@@ -1,5 +1,5 @@
 language: node_js
-node-js:
+node_js:
   - "7"
 install:
   - yarn install

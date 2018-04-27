@@ -8,5 +8,5 @@ script:
   - yarn lerna run lint
   - yarn lerna run test
 after_success:
-  - travis/login.sh
+  - yarn npm-cli-login
   - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && yarn run pre && yarn run publish && yarn run post && travis/push.sh

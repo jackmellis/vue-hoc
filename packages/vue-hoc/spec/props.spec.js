@@ -211,3 +211,135 @@ test('knows about mixin props', t => {
 
   t.is(html, expected);
 });
+
+test('overrides mixin props with component-level props', t => {
+  const C = Object.assign({}, Component, {
+    props: {
+      mixinProp: {
+        default: 'from-component',
+      },
+    },
+    mixins: [
+      {
+        props: {
+          mixinProp: {
+            default: 'from-mixin',
+          },
+        },
+      },
+    ],
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.mixinProp, 'from-component');
+    },
+  });
+  const hoc = withCreated(C);
+
+  const html = mount(hoc).$html;
+
+  const expected = '<ul><li></li><li></li></ul>';
+
+  t.is(html, expected);
+});
+
+test('overrides component props with hoc props', t => {
+  const C = Object.assign({}, Component, {
+    props: {
+      mixinProp: {
+        default: 'from-component',
+      },
+    },
+    mixins: [
+      {
+        props: {
+          mixinProp: {
+            default: 'from-mixin',
+          },
+        },
+      },
+    ],
+  });
+  const withCreated = createHOCc({
+    props: {
+      mixinProp: {
+        default: 'from-hoc',
+      },
+    },
+    created(){
+      t.is(this.mixinProp, 'from-hoc');
+    },
+  });
+  const hoc = withCreated(C);
+
+  const html = mount(hoc).$html;
+
+  const expected = '<ul><li></li><li></li></ul>';
+
+  t.is(html, expected);
+});
+
+test('it recursively collects mixin props', t => {
+  const C = Object.assign({}, Component, {
+    mixins: [
+      {
+        mixins: [
+          {
+            props: {
+              mixinProp: {
+                default: 'from-deep-mixin',
+              },
+            },
+          },
+        ],
+      },
+    ],
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.mixinProp, 'from-deep-mixin');
+    },
+  });
+  const hoc = withCreated(C);
+
+  const html = mount(hoc).$html;
+
+  const expected = '<ul><li></li><li></li></ul>';
+
+  t.is(html, expected);
+});
+
+test('it takes the highest mixin prop', t => {
+  const C = Object.assign({}, Component, {
+    mixins: [
+      {
+        props: {
+          mixinProp: {
+            default: 'from-shallow-mixin',
+          },
+        },
+        mixins: [
+          {
+            props: {
+              mixinProp: {
+                default: 'from-deep-mixin',
+              },
+            },
+          },
+        ],
+      },
+    ],
+  });
+  const withCreated = createHOCc({
+    created(){
+      t.is(this.mixinProp, 'from-shallow-mixin');
+    },
+  });
+  const hoc = withCreated(C);
+
+  const html = mount(hoc).$html;
+
+  const expected = '<ul><li></li><li></li></ul>';
+
+  t.is(html, expected);
+});

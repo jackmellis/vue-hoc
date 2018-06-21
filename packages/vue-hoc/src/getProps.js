@@ -17,15 +17,28 @@ const normalize = (props) => {
   return assign({}, props);
 };
 
-export default (Component) => {
-  const options = getComponentOptions(Component);
-  const props = normalize(options.props);
-  const mixins = options.mixins || [];
+const mergeMixinProps = (mixins, initial = {}) => {
+  if (!mixins || !mixins.length) {
+    return initial;
+  }
 
   return mixins.reduce((result, mixin) => {
-    if (!mixin.props) {
-      return result;
-    }
-    return assign({}, result, normalize(mixin.props));
-  }, props);
+    const props = assign(
+      {},
+      mergeMixinProps(mixin.mixins, result),
+      normalize(mixin.props),
+    );
+
+    return assign({}, result, props);
+  }, initial);
 };
+
+const getProps = (Component) => {
+  const options = getComponentOptions(Component);
+  const props = normalize(options.props);
+  const mixinProps = mergeMixinProps(options.mixins);
+
+  return assign({}, mixinProps, props);
+};
+
+export default getProps;

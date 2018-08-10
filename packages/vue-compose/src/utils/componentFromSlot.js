@@ -5,6 +5,7 @@ const componentFromSlot = (options = {}) => {
     name: 'ComponentFromSlot',
     render(){
       const props = assign({}, this.$attrs, this.$props );
+      const listeners = this.$listeners || {};
       let vNode;
 
       if (this.$scopedSlots.children) {
@@ -21,11 +22,23 @@ const componentFromSlot = (options = {}) => {
         vNode = slot;
       }
 
-      if (vNode) {
-        return vNode;
+      if (!vNode) {
+        throw new Error('No slot content for ComponentFromSlot component');
       }
 
-      throw new Error('No slot content for ComponentFromSlot component');
+      const options = vNode.componentOptions || {};
+      const listenerData = options.listeners = options.listeners || {};
+      Object.keys(listeners).forEach((key) => {
+        if (listenerData[key] == null) {
+          listenerData[key] = listeners[key];
+        } else if (Array.isArray(listenerData[key])) {
+          listenerData[key].push(listeners[key]);
+        } else {
+          listenerData[key] = [ listenerData[key], listeners[key] ];
+        }
+      });
+
+      return vNode;
     }
   }, options);
 };

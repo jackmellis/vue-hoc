@@ -1,10 +1,12 @@
 import test from 'ava';
+import sinon from 'sinon';
 import {mount} from 'vuenit';
 import {
   componentFromSlot,
   withStyle,
   withClass,
   withProps,
+  withHandlers,
   acceptProps,
   compose
 } from 'vue-compose';
@@ -92,4 +94,61 @@ test('it passes props to the inner componet', t => {
   const expected = '<div id="foo" value="some value">some value</div>';
 
   t.is(actual, expected);
+});
+
+test('it listens to events of the inner componet', t => {
+  const spy = sinon.stub().callsFake((x) => {
+    t.is(x, 'foo');
+  });
+  const Inner = {
+    template: '<div id="inner">I am inner</div>',
+    mounted () {
+      this.$emit('event', 'foo');
+    },
+  };
+  mount(Inner);
+  const Outer = compose(
+    withHandlers({
+      event: spy,
+    }),
+  )(componentFromSlot());
+
+  const Wrapper = {
+    components: { Inner, Outer },
+    template: '<Outer><Inner/></Outer>',
+  };
+
+  mount(Wrapper);
+
+  t.is(spy.called, true);
+});
+
+test('it does not overwrite existing listners', t => {
+  const spy1 = sinon.spy();
+  const spy2 = sinon.spy();
+  const Inner = {
+    template: '<div id="inner">I am inner</div>',
+    mounted () {
+      this.$emit('event', 'foo');
+    },
+  };
+  mount(Inner);
+  const Outer = compose(
+    withHandlers({
+      event: spy2,
+    }),
+  )(componentFromSlot());
+
+  const Wrapper = {
+    components: { Inner, Outer },
+    template: '<Outer><Inner @event="event"/></Outer>',
+    methods: {
+      event: spy1,
+    },
+  };
+
+  mount(Wrapper);
+
+  t.is(spy2.called, true);
+  t.is(spy1.called, true);
 });

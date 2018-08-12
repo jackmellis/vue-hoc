@@ -19,6 +19,7 @@ import inject from './mutators/inject';
 import createSink from './utils/createSink';
 import componentFromProp from './utils/componentFromProp';
 import componentFromSlot from './utils/componentFromSlot';
+import renderNothing from './utils/renderNothing';
 import { compose, pipe } from './utils/compose';
 
 export {
@@ -43,6 +44,7 @@ export {
   createSink,
   componentFromProp,
   componentFromSlot,
+  renderNothing,
   compose,
   pipe,
 };

@@ -1,3 +1,4 @@
+import branch from './hocs/branch';
 import mapProps from './hocs/mapProps';
 import withProps from './hocs/withProps';
 import defaultProps from './hocs/defaultProps';
@@ -21,6 +22,7 @@ import componentFromSlot from './utils/componentFromSlot';
 import { compose, pipe } from './utils/compose';
 
 export {
+  branch,
   mapProps,
   withProps,
   defaultProps,

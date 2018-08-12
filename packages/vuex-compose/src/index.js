@@ -17,6 +17,7 @@ import {
   mapActionCreatorsToMethods,
   mapActionCreatorsToHandlers,
 } from './actions';
+import connect from './connect';
 
 export {
   compose,
@@ -36,4 +37,5 @@ export {
   mapActionCreatorsToProps,
   mapActionCreatorsToMethods,
   mapActionCreatorsToHandlers,
+  connect,
 };

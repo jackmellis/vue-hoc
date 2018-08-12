@@ -120,6 +120,16 @@ compose(
 ) => (Component) => Component
 ```
 
+### connect
+```ja
+(
+  namespace?: string,
+  mapStateToProps?: Array<string> | { [key]: string | Function },
+  mapActionsToHandlers?: { [key]: string },
+  mapGettersToProps?: Array<string>,
+) => (Component) => Component
+```
+
 ### registerModule
 ```js
 (

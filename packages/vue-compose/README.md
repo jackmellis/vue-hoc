@@ -240,6 +240,18 @@ Adds styles to the base component.
 ```
 Leverages Vue's `provide/inject` functionality. Use in conjunction with the `inject` method.
 
+#### branch
+```js
+(
+  testFn: (props: Object) => boolean,
+  trueFn: (h: Function) => vNode,
+  falseFn?: (h: Function) => vNode,
+) => (Component) => Component
+```
+Use an alternate render function based on a predecate function. For example, if you want to render a loading spinner based on a `loading` prop. If you don't provide a `falseFn`, it will fall back to using the component's original render function; this is the most common use case.
+
+Note that you must use render functions, it is not possible to insert template syntax here. This does mean, however, that you can still use `jsx` syntax.
+
 ### Mutators
 Mutators don't create a new HOC, but actually **mutate** the provided component with new attributes.
 #### withComputed

@@ -404,6 +404,28 @@ it('passes a foo prop', (done) => {
 });
 ```
 
+#### renderNothing
+```js
+Component
+```
+A component that never renders.
+
+```js
+import { renderNothing } from 'vue-compose';
+
+export default {
+  components: { NotFinishedYet: renderNothing },
+  template: '<div><not-finished-yet/></div>',
+}
+```
+You can also use this in a branch to only render under certain conditions:
+```js
+branch(
+  ({ loading }) => loading,
+  renderNothing,
+)(MyComponent)
+```
+
 ## FAQ
 #### Why is recompose.X missing?
 React and Vue look very similar on the surface, but they are actually entirely different beasts. Vue handles a lot more stuff behind the scenes. It's quite easy for React developers to want to shoehorn React techniques into a Vue application, but often there is no need because Vue handles things differently.

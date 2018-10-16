@@ -1,5 +1,5 @@
-<a name="0.5.0"></a>
-# [0.5.0](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.5.0) (2018-04-16)
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.7.0) (2018-10-16)
 
 
 ### Bug Fixes
@@ -10,8 +10,12 @@
 
 ### Features
 
+* **vue-compose:** add withNativeHandlers method ([6710991](https://github.com/jackmellis/vue-hoc/commit/6710991)), closes [#37](https://github.com/jackmellis/vue-hoc/issues/37)
+* **vue-compose:** branch ([fbc0f2b](https://github.com/jackmellis/vue-hoc/commit/fbc0f2b))
+* **vue-compose:** componentFromSlot listens to events ([8852fdc](https://github.com/jackmellis/vue-hoc/commit/8852fdc)), closes [#27](https://github.com/jackmellis/vue-hoc/issues/27)
 * **vue-compose:** move to mono repo ([df2f3f4](https://github.com/jackmellis/vue-hoc/commit/df2f3f4))
 * **vue-compose:** provide and inject hocs ([c25ece5](https://github.com/jackmellis/vue-hoc/commit/c25ece5))
+* **vue-compose:** renderNothing ([a8c296e](https://github.com/jackmellis/vue-hoc/commit/a8c296e))
 
 
 

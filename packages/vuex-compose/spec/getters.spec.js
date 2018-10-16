@@ -1,7 +1,7 @@
 import test from 'ava';
 import sinon from 'sinon';
 import { mount, mockStore } from 'vuenit';
-import { createSink } from 'vue-compose';
+import { createSink, compose } from 'vue-compose';
 
 import {
   mapGettersToProps,
@@ -21,6 +21,33 @@ test('maps getters to props', t => {
     t.is(props.double, 4);
   });
   const Wrapper = mapGettersToProps([ 'double' ])(C);
+
+  mount(Wrapper, {
+    install: (Vue) => Vue.prototype.$store = store,
+  });
+});
+
+test('maps getter factories to props', t => {
+  const store = mockStore({
+    state: {
+      count: 2,
+    },
+    getters: {
+      MULTIPLY: (state) => (x) => state.count * x,
+    },
+  });
+  const C = createSink((props) => {
+    t.is(typeof props.multiply, 'function');
+    t.is(props.multiply(3), 6);
+  });
+
+  const enhance = compose(
+    mapGettersToProps({
+      multiply: 'MULTIPLY',
+    }),
+  );
+
+  const Wrapper = enhance(C);
 
   mount(Wrapper, {
     install: (Vue) => Vue.prototype.$store = store,

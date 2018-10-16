@@ -118,7 +118,7 @@ export const createRenderFn = (Component, options) => {
     const data = getData(context || this, !!context);
     const scopedSlots = (context && context.data && context.data.scopedSlots) ||
                         (this && this.$scopedSlots);
-    const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$parent)) || [];
+    const slots = (context && context.children) || (this && this.$slots && normalizeSlots(this.$slots, this.$vnode.context)) || [];
     const unusedProps = getUnusedProps(Component, data.props);
 
     data.scopedSlots = data.scopedSlots || scopedSlots;

@@ -5,7 +5,6 @@ import Vue from 'vue';
 
 const defaultStrategy = (parent, child) => child;
 
-
 export const createHOC = (Component, options, renderOptions) => {
   const target = getComponentOptions(Component);
   const hoc = {
@@ -29,7 +28,8 @@ export const createHOC = (Component, options, renderOptions) => {
 
   hoc.mixins && hoc.mixins.push({
     created(){
-      this.$createElement = this.$parent.$createElement;
+      this.$createElement = this.$vnode.context.$createElement;
+      this._c = this.$vnode.context._c;
     }
   });
 

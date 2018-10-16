@@ -11,6 +11,9 @@ const Component = {
   template : `<div>
                 <slot></slot>
                 <slot name="named_slot"></slot>
+                <div>
+                  <slot name="other_slot"></slot>
+                </div>
               </div>`
 };
 mount(Component);
@@ -60,6 +63,19 @@ test('it renders multiple slots', t => {
   t.true(vm.$contains('#second'));
   t.true(vm.$contains('#third'));
   t.true(vm.$contains('#fourth'));
+});
+test('it renders named slots in order', t => {
+  const hoc =createHOC(Component);
+  const vm = mount(hoc, {
+    innerHTML: `
+      <div slot="other_slot">other</div>
+      <div>default</div>
+      <div slot="named_slot">named</div>
+    `,
+  });
+  const html = vm.$html;
+
+  t.is(html, '<div><div>default</div><div>named</div><div><div>other</div></div></div>');
 });
 
 test('(Component) it renders text slot content', t => {

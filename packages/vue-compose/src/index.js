@@ -4,6 +4,7 @@ import withProps from './hocs/withProps';
 import defaultProps from './hocs/defaultProps';
 import acceptProps from './hocs/acceptProps';
 import withHandlers from './hocs/withHandlers';
+import withNativeHandlers from './hocs/withNativeHandlers';
 import withPassive from './hocs/withPassive';
 import withHooks from './hocs/withHooks';
 import withClass from './hocs/withClass';
@@ -29,6 +30,7 @@ export {
   defaultProps,
   acceptProps,
   withHandlers,
+  withNativeHandlers,
   withPassive,
   withHooks,
   withClass,
@@ -55,6 +57,7 @@ export default {
   defaultProps,
   acceptProps,
   withHandlers,
+  withNativeHandlers,
   withPassive,
   withHooks,
   withClass,

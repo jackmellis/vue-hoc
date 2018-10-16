@@ -160,6 +160,16 @@ withHandlers({
 ```
 Just like `withHandlers` except the event is automatically propagated up.
 
+#### withNativeHandlers
+```js
+(
+  listeners: {
+    [handlerName: string]: (...args: Array<any>) => any
+  },
+) => (Component) => Component;
+```
+Adds native DOM even listeners to the component.
+
 #### withData
 ```js
 (

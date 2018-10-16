@@ -1,11 +1,12 @@
-<a name="0.7.0"></a>
-# [0.7.0](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.7.0) (2018-10-16)
+<a name="0.7.1"></a>
+## [0.7.1](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.7.1) (2018-10-16)
 
 
 ### Bug Fixes
 
 * **vue-compose:** componentFromSlot now accepts Component slots ([f483bc3](https://github.com/jackmellis/vue-hoc/commit/f483bc3))
 * **vue-compose:** fix readme ([9e19b8e](https://github.com/jackmellis/vue-hoc/commit/9e19b8e))
+* **vue-compose:** missing build ([a881bfc](https://github.com/jackmellis/vue-hoc/commit/a881bfc))
 
 
 ### Features

@@ -1,10 +1,11 @@
-<a name="0.4.5"></a>
-## [0.4.5](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.4.5) (2018-10-16)
+<a name="0.4.6"></a>
+## [0.4.6](https://github.com/jackmellis/vue-hoc/compare/0.3.0...0.4.6) (2018-10-16)
 
 
 ### Bug Fixes
 
 * **vue-hoc:** correctly render named slots ([561f52e](https://github.com/jackmellis/vue-hoc/commit/561f52e)), closes [#36](https://github.com/jackmellis/vue-hoc/issues/36) [#30](https://github.com/jackmellis/vue-hoc/issues/30)
+* **vue-hoc:** missing build ([a3ccc8c](https://github.com/jackmellis/vue-hoc/commit/a3ccc8c))
 
 
 

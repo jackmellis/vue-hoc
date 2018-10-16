@@ -1,1 +1,3 @@
-export default (Component) => (typeof Component === 'function') ? Component.options : Component;
+import { isFunction } from './utils';
+
+export default (Component) => (isFunction(Component)) ? Component.options : Component;

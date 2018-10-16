@@ -1,11 +1,11 @@
-import assign from './assign';
+import { assign, isArray } from './utils';
 import getComponentOptions from './getComponentOptions';
 
 const normalize = (props) => {
   if (!props) {
     return {};
   }
-  if (Array.isArray(props)) {
+  if (isArray(props)) {
     const result = {};
     props.forEach((key) => {
       if (typeof key === 'string') {

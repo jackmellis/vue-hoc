@@ -1,27 +1,35 @@
+import Vue from 'vue';
 import { createRenderFnc } from './createRenderFn';
 import getProps from './getProps';
 import getComponentOptions from './getComponentOptions';
-import Vue from 'vue';
+import { CURRIED } from './constants';
 
 const defaultStrategy = (parent, child) => child;
 
 export const createHOC = (Component, options, renderOptions) => {
   const target = getComponentOptions(Component);
+
   const hoc = {
     props: getProps(target),
     mixins: [],
     name: `${target.name || 'Anonymous'}HOC`,
     render: createRenderFnc(renderOptions),
   };
+
   if (options){
+    // merge options into the hoc
+    // we piggyback off Vue's optionMergeStrategies so we get the same
+    // merging behavior as with mixins
     Object.keys(options).forEach((key) => {
       let child = options && options[key];
       const parent = hoc[key];
       const strategy = Vue.config.optionMergeStrategies[key] || defaultStrategy;
 
+      // props are unique as we have a specific normaliser
       if (key === 'props') {
         child = getProps(options);
       }
+
       hoc[key] = strategy(parent, child);
     });
   }
@@ -33,7 +41,7 @@ export const createHOC = (Component, options, renderOptions) => {
     }
   });
 
-  if (hoc.render && hoc.render.curried){
+  if (hoc.render && hoc.render[CURRIED]){
     hoc.render = hoc.render(Component);
   }
 
@@ -45,7 +53,7 @@ export const createHOCc = (
   renderOptions,
 ) => {
   const curried = (Component) => createHOC(Component, options, renderOptions);
-  curried.curried = true;
+  curried[CURRIED] = true;
   return curried;
 };
 

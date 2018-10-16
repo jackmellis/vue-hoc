@@ -25,6 +25,10 @@ const poly = function (target, ...sources) {
   return target;
 };
 
-const assign = Object.assign || poly;
+export const assign = Object.assign || poly;
 
-export default assign;
+export const isObject = (test) => test && Object.prototype.toString.call(test) === '[object Object]';
+
+export const isFunction = (test) => typeof test === 'function';
+
+export const isArray = Array.isArray;

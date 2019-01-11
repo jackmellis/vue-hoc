@@ -38,6 +38,6 @@
     "vue-compose": "link:../vue-compose"
   },
   "peerDependencies": {
-    "vuex": "^2.0.0"
+    "vuex": "^3.0.0"
   }
 }

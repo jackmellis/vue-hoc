@@ -6,13 +6,20 @@ export default (namespace, store) => {
   }
   return withHooks({
     created () {
-      const isRegistered = !!namespace.reduce((state, n) => {
-        return state && state[n];
-      }, this.$store.state);
+      let state = this.$store.state;
+      let keys = [];
 
-      if (!isRegistered) {
-        this.$store.registerModule(namespace, store);
-      }
+      namespace.forEach((key, i) => {
+        keys.push(key);
+        if (!state[key]) {
+          if (i === namespace.length - 1) {
+            this.$store.registerModule(keys, store);
+          } else {
+            this.$store.registerModule(keys, {});
+          }
+        }
+        state = state[key];
+      });
     },
   });
 };

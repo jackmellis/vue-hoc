@@ -3,11 +3,11 @@ const normalizeSlots = (slots, context) => Object.keys(slots)
     slots[key].forEach((vnode) => {
       if (!vnode.context) {
         slots[key].context = context;
-        if (!vnode.data) {
-          vnode.data = {};
-        }
-        vnode.data.slot = key;
       }
+      if (!vnode.data) {
+        vnode.data = {};
+      }
+      vnode.data.slot = key;
     });
     return arr.concat(slots[key]);
   }, []);

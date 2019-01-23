@@ -18,6 +18,20 @@ const Component = {
 };
 mount(Component);
 
+const Dynamic = {
+  template: `
+      <component :is="wrappedComponent">
+        <div :slot="'other_slot'">other differently</div>
+        <slot slot="named_slot" name="named_slot">named differently</slot>
+        <template slot="default"><slot name="default">named differently</slot></template>
+      </component>
+    `,
+  props: {
+    wrappedComponent: Object
+  }
+};
+mount(Dynamic);
+
 test('it renders a slot', t => {
   const vm = mount(Component, {
     slots: {
@@ -86,6 +100,37 @@ test('(Component) it renders text slot content', t => {
   const html = vm.$html;
 
   t.true(html.includes('some text'));
+});
+test('it renders dynamic named slots in order', t => {
+  const hoc = createHOC(Component);
+  const vm = mount(hoc, {
+    innerHTML: `
+      <div :slot="'other_slot'">other</div>
+      <div>default</div>
+      <template :slot="'named_slot'">named</template>
+    `,
+  });
+  const html = vm.$html;
+
+  t.is(html, '<div><div>default</div>named<div><div>other</div></div></div>');
+});
+test('it renders template slots in dynamic component', t => {
+  const hoc = createHOC(Dynamic, null, {
+    props: {
+      wrappedComponent: Component
+    }
+  });
+  const vm = mount(hoc, {
+    innerHTML: `
+      <div slot="other_slot">other</div>
+      <div>default</div>
+      <template slot="named_slot"><div>named</div><div>named 2</div></template>
+      <div>default 2</div>
+    `,
+  });
+  const html = vm.$html;
+
+  t.is(html, '<div><div>default</div><div>default 2</div><div>named</div><div>named 2</div><div><div>other differently</div></div></div>');
 });
 
 test('(string) it renders text slot content', t => {

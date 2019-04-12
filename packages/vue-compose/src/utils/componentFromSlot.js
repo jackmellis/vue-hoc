@@ -12,7 +12,7 @@ const componentFromSlot = (options = {}) => {
         vNode = this.$scopedSlots.children(props);
       }
       if (this.$scopedSlots.default) {
-        vNode = this.$scopeSlots.default(props)[0];
+        vNode = this.$scopedSlots.default(props)[0];
       }
       if (this.$slots.default) {
         const slot = this.$slots.default[0];

@@ -1,7 +1,8 @@
 import { createHOC, createRenderFn } from 'vue-hoc';
 import { wrapName } from '../mutators/setName';
 
-export default (testFn, trueFn, falseFn) => (ctor) => {
+export default (testFn, trueFn, f) => (ctor) => {
+  let falseFn = f;
   if (falseFn == null) {
     falseFn = createRenderFn(ctor);
   }
